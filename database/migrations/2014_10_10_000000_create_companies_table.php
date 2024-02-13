@@ -23,7 +23,7 @@ return new class extends Migration
             $table->date('establishDate');
             $table->enum('status', ['PENDING', 'ACTIVE', 'INACTIVE', 'RESTRICTED']);
             $table->unsignedInteger('jobsPosted')->default(0);
-            $table->text('restrictionFeedback');
+            $table->text('restrictionFeedback')->nullable();
 
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
