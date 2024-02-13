@@ -11,20 +11,29 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('blogs', function (Blueprint $table) {
             $table->id();
 
             $table->foreignId('company_id')
                 ->nullable()
                 ->constrained()
                 ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+
+            $table->foreignId('user_id')
+                ->nullable()
+                ->constrained()
+                ->cascadeOnUpdate()
+                ->nullOnDelete();
+
+            $table->foreignId('blog_category_id')
+                ->constrained()
+                ->cascadeOnUpdate()
                 ->restrictOnDelete();
 
-            $table->string('email')->unique();
-            $table->string('role');
-            $table->string('password');
-            $table->string('otp');
-            $table->timestamp('emailVerifiedAt')->nullable();
+            $table->string('title');
+            $table->longText('body');
+            $table->string('coverImg');
 
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
@@ -36,6 +45,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('blogs');
     }
 };

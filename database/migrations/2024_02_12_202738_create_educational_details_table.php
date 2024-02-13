@@ -11,20 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('educational_details', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('company_id')
-                ->nullable()
+            $table->foreignId('candidate_profile_id')
                 ->constrained()
                 ->cascadeOnUpdate()
-                ->restrictOnDelete();
+                ->cascadeOnDelete();
 
-            $table->string('email')->unique();
-            $table->string('role');
-            $table->string('password');
-            $table->string('otp');
-            $table->timestamp('emailVerifiedAt')->nullable();
+            $table->enum('degreeType', ['SSC', 'HSC', 'Bachelor/Honors']);
+            $table->string('institution');
+            $table->string('department');
+            $table->unsignedDouble('cgpa', 3, 2);
+            $table->string('certificate');
+            $table->unsignedSmallInteger('passingYear');
 
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
@@ -36,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('educational_details');
     }
 };
