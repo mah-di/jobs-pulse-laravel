@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::post('/jobs-pulse/admin/login', [UserController::class, 'loginSuperUser']);
+
+Route::post('/company/register', [UserController::class, 'registerCompany']);
+Route::post('/company/login', [UserController::class, 'loginCompany']);
+
+Route::post('/candidate/register', [UserController::class, 'registerCandidate']);
+Route::post('/candidate/login', [UserController::class, 'loginCandidate']);
+
+Route::post('/verify-email', [UserController::class, 'verifyEmail'])->middleware('auth.jwt');

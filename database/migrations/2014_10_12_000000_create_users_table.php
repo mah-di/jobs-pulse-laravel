@@ -21,10 +21,11 @@ return new class extends Migration
                 ->restrictOnDelete();
 
             $table->string('email')->unique();
-            $table->string('role');
+            $table->enum('role', ['Site Admin', 'Site Manager', 'Site Editor', 'Admin', 'Manager', 'Editor', 'Candidate']);
             $table->string('password');
             $table->string('otp');
             $table->timestamp('emailVerifiedAt')->nullable();
+            $table->boolean('isSuperUser')->default(false);
 
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
