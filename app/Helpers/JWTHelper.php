@@ -8,7 +8,7 @@ use Firebase\JWT\Key;
 
 class JWTHelper
 {
-    public static function createToken(User $user): string
+    public static function createToken(User $user, string $type = 'auth.token'): string
     {
         $payload = [
             'iss' => env('APP_NAME'),
@@ -19,6 +19,7 @@ class JWTHelper
             'companyID' => $user->company_id,
             'role' => $user->role,
             'verified' => $user->emailVerifiedAt,
+            'type' => $type,
         ];
 
         $key = env('JWT_KEY');
@@ -26,7 +27,7 @@ class JWTHelper
         return JWT::encode($payload, $key, 'HS256');
     }
 
-    public static function verifyToken(?string $token): ?object
+    public static function verifyToken(?string $token, string $type): ?object
     {
         try {
             if ($token === null)
@@ -36,7 +37,11 @@ class JWTHelper
 
             $payload = JWT::decode($token, new Key($key, 'HS256'));
 
+            if ($type !== $payload->type)
+                throw new Exception();
+
             return $payload;
+
         } catch (Exception $exception) {
             return null;
         }

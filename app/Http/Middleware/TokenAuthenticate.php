@@ -23,7 +23,13 @@ class TokenAuthenticate
         try {
             $token = $request->header('token') ?? $request->cookie('token');
 
-            $payload = JWTHelper::verifyToken($token);
+            if ($request->routeIs('password.reset')) $type = 'password.reset';
+            else $type = 'auth.token';
+
+            $payload = JWTHelper::verifyToken($token, $type);
+
+            if (!$payload)
+                throw new Exception();
 
             $user = User::find($payload->userID);
 
