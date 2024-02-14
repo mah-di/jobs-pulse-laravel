@@ -20,7 +20,7 @@ return new class extends Migration
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
 
-            $table->foreignId('user_id')
+            $table->foreignId('profile_id')
                 ->nullable()
                 ->constrained()
                 ->cascadeOnUpdate()

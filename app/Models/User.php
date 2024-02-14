@@ -76,9 +76,4 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Job::class, SavedJob::class);
     }
-
-    public function blogs()
-    {
-        return $this->hasMany(Blog::class);
-    }
 }
