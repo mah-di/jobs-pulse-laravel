@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Helpers\JWTHelper;
 use App\Helpers\ResponseHelper;
-use App\Helpers\TimestampHelper;
 use App\Mail\OTPMail;
 use App\Models\Company;
 use App\Models\Profile;
@@ -27,7 +26,7 @@ class UserController extends Controller
                 'comLogo' => ['required', FileRule::image()->max(2048)],
                 'comDescription' => ['required', 'min:50'],
                 'comAddress' => ['required', 'min:10'],
-                'comContact' => ['required', 'digits_between:11,15', 'unique:companies,contact'],
+                'comContact' => ['required', 'digits:10', 'unique:companies,contact'],
                 'comEmail' => ['required', 'email', 'unique:companies,email'],
                 'comWebsite' => ['nullable', 'url', 'unique:companies,website'],
                 'comEstablishDate' => ['required', 'date'],
@@ -61,7 +60,7 @@ class UserController extends Controller
                 'logo' => $logoUrl,
                 'description' => $request->comDescription,
                 'address' => $request->comAddress,
-                'contact' => $request->comContact,
+                'contact' => '+880' . $request->comContact,
                 'email' => $request->comEmail,
                 'website' => $request->comWebsite,
                 'establishDate' => $request->comEstablishDate,
@@ -376,7 +375,7 @@ class UserController extends Controller
                 'success',
                 null,
                 'Password Changed Successfully!',
-            )->cookie('token', '', -1);
+            );
 
         } catch (Exception $exception) {
             return ResponseHelper::make('fail', null, $exception->getMessage());

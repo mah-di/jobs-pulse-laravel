@@ -25,4 +25,13 @@ class Profile extends Model
     {
         return $this->hasMany(Blog::class);
     }
+
+    protected static function boot()
+    {
+        static::saving(function ($model) {
+            $model->profileImg = $model->profileImg ?? env('DEFAULT_PROFILE_IMG');
+        });
+
+        parent::boot();
+    }
 }
