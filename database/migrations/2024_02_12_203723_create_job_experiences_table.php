@@ -21,10 +21,10 @@ return new class extends Migration
 
             $table->string('designation');
             $table->string('company');
-            $table->string('jobDetails');
+            $table->string('jobDetails', 2000);
             $table->boolean('isCurrentJob');
             $table->date('joiningDate');
-            $table->date('quittingDate');
+            $table->date('quittingDate')->nullable();
 
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();

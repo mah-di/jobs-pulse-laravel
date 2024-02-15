@@ -24,7 +24,6 @@ class CandidateProfileController extends Controller
         } catch (Exception $exception) {
             return ResponseHelper::make('fail', null, $exception->getMessage());
         }
-
     }
 
     public function save(Request $request)
