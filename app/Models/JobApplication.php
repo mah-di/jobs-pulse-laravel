@@ -15,9 +15,13 @@ class JobApplication extends Model
         'status',
     ];
 
+    protected $attributes = [
+        'status' => 'PENDING',
+    ];
+
     public function candidate()
     {
-        return $this->belongsTo(CandidateProfile::class);
+        return $this->belongsTo(CandidateProfile::class, 'candidate_profile_id');
     }
 
     public function job()

@@ -2,10 +2,12 @@
 
 use App\Http\Controllers\CandidateProfileController;
 use App\Http\Controllers\EducationalDetailController;
+use App\Http\Controllers\JobApplicationController;
 use App\Http\Controllers\JobCategoryController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\JobExperienceController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SavedJobController;
 use App\Http\Controllers\TrainingController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -74,3 +76,14 @@ Route::get('/job', [JobController::class, 'search'])->name('job.search')->middle
 Route::get('/company/job', [JobController::class, 'getCompanyJobs'])->name('job.by.company')->middleware('auth.jwt');
 Route::get('/jobs-pulse/admin/job/{status}', [JobController::class, 'getJobsByStatus'])->name('job.by.status')->middleware('auth.jwt');
 Route::get('/jobs-pulse/admin/count/job', [JobController::class, 'getJobsCount'])->name('job.count')->middleware('auth.jwt');
+
+Route::get('/job-application/{jobId}', [JobApplicationController::class, 'create'])->name('job.application.create')->middleware('auth.jwt');
+Route::post('/job-application/{id}/update-status', [JobApplicationController::class, 'updateStatus'])->name('job.application.update')->middleware('auth.jwt');
+Route::delete('/job-application/{id}', [JobApplicationController::class, 'delete'])->name('job.application.delete')->middleware('auth.jwt');
+Route::get('/job/{id}/applications/count', [JobApplicationController::class, 'receivedApplicationCount'])->name('job.application.count')->middleware('auth.jwt');
+Route::get('/job/{id}/applications', [JobApplicationController::class, 'receivedApplications'])->name('job.application.received')->middleware('auth.jwt');
+Route::get('/candidate/job-applications', [JobApplicationController::class, 'candidateApplications'])->name('candidate.job.application')->middleware('auth.jwt');
+
+Route::get('/job/save/{jobId}', [SavedJobController::class, 'create'])->name('saved.job.create')->middleware('auth.jwt');
+Route::delete('/job/save/{jobId}', [SavedJobController::class, 'delete'])->name('saved.job.delete')->middleware('auth.jwt');
+Route::get('/saved-jobs', [SavedJobController::class, 'showAll'])->name('saved.job.showAll')->middleware('auth.jwt');

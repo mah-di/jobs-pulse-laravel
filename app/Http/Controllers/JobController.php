@@ -71,6 +71,9 @@ class JobController extends Controller
                 'deadline' => $request->deadline,
             ]);
 
+            if (!$data)
+                throw new Exception("Unauthorized request");
+
             return ResponseHelper::make(
                 'success',
                 null,
@@ -92,6 +95,9 @@ class JobController extends Controller
             $companyId = $request->user()->company_id;
 
             $data = Job::where(['id' => $id, 'company_id' => $companyId])->update(['status' => $request->status]);
+
+            if (!$data)
+                throw new Exception("Unauthorized request");
 
             return ResponseHelper::make(
                 'success',

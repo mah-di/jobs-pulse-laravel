@@ -60,7 +60,7 @@ class UserController extends Controller
                 'logo' => $logoUrl,
                 'description' => $request->comDescription,
                 'address' => $request->comAddress,
-                'contact' => '+880' . $request->comContact,
+                'contact' => $request->comContact,
                 'email' => $request->comEmail,
                 'website' => $request->comWebsite,
                 'establishDate' => $request->comEstablishDate,
