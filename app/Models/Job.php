@@ -22,6 +22,10 @@ class Job extends Model
         'restrictionFeedback',
     ];
 
+    protected $attributes = [
+        'status' => 'PENDING',
+    ];
+
     public function jobCategory()
     {
         return $this->belongsTo(JobCategory::class);

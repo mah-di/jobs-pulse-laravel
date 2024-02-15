@@ -30,7 +30,9 @@ class CandidateProfileController extends Controller
     {
         try {
             $request->validate([
-                'profileImg' => ['nullable', FileRule::image()->max(2048)],
+                'id' => ['nullable', 'exists:candidate_profiles'],
+                'image' => ['nullable', FileRule::image()->max(2048)],
+                'profileImg' => ['nullable'],
                 'firstName' => ['required'],
                 'lastName' => ['required'],
                 'fatherName' => ['required'],
@@ -47,21 +49,19 @@ class CandidateProfileController extends Controller
                 'dribble' => ['nullable', 'url'],
                 'twitter' => ['nullable', 'url'],
                 'slack' => ['nullable', 'url'],
-                'nid' => ['required', 'min:10', 'unique:candidate_profiles,nid'],
-                'passport' => ['nullable', 'unique:candidate_profiles,passport'],
+                'nid' => ['required', 'min:10', 'unique:candidate_profiles,nid,' . $request->id],
+                'passport' => ['nullable', 'unique:candidate_profiles,passport,' . $request->id],
                 'bloodGroup' => ['required', 'in:A+,A-,AB+,AB-,B+,B-,O+,O-'],
             ]);
 
-            $profileImgUrl = null;
+            $profileImgUrl = $request->profileImg ?? env('DEFAULT_PROFILE_IMG');
 
-            if ($request->hasFile('profileImg')) {
-                $profile = $request->user()->candidateProfile;
-
-                if ($profile and $profile->profileImg !== env('DEFAULT_PROFILE_IMG') and File::exists(public_path($profile->profileImg))) {
-                    File::delete(public_path($profile->profileImg));
+            if ($request->hasFile('image')) {
+                if ($profileImgUrl !== env('DEFAULT_PROFILE_IMG') and File::exists(public_path($profileImgUrl))) {
+                    File::delete(public_path($profileImgUrl));
                 }
 
-                $img = $request->file('profileImg');
+                $img = $request->file('image');
                 $filename = uuid_create() . '.' . $img->getClientOriginalExtension();
                 $profileImgUrl = "storage/uploads/profile-images/{$filename}";
                 $img->storeAs("uploads/profile-images", $filename);

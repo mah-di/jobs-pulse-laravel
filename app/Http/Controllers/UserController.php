@@ -44,7 +44,7 @@ class UserController extends Controller
                 $logo->storeAs("uploads/company-logos", $filename);
             }
 
-            $profileImgUrl = null;
+            $profileImgUrl = env('DEFAULT_PROFILE_IMG');
 
             if ($request->hasFile('userProfileImg')) {
                 $profileImg = $request->file('userProfileImg');
