@@ -217,6 +217,19 @@ class UserController extends Controller
         }
     }
 
+    public function getUser(Request $request)
+    {
+        try {
+            return ResponseHelper::make(
+                'success',
+                $request->user()
+            );
+
+        } catch (Exception $exception) {
+            return ResponseHelper::make('fail', null, $exception->getMessage());
+        }
+    }
+
     public function verifyEmail(Request $request)
     {
         try {

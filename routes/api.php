@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CandidateProfileController;
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\EducationalDetailController;
 use App\Http\Controllers\JobApplicationController;
 use App\Http\Controllers\JobCategoryController;
@@ -32,12 +33,18 @@ Route::post('/company/login', [UserController::class, 'loginCompany']);
 Route::post('/candidate/register', [UserController::class, 'registerCandidate']);
 Route::post('/candidate/login', [UserController::class, 'loginCandidate']);
 
+Route::get('/user', [UserController::class, 'getUser'])->name('user.get')->middleware('auth.jwt');
 Route::get('/resend-otp', [UserController::class, 'resendVerificationOTP'])->name('resend.otp')->middleware('auth.jwt');
 Route::post('/verify-email', [UserController::class, 'verifyEmail'])->name('verify')->middleware('auth.jwt');
 Route::post('/request-password-reset', [UserController::class, 'sendPasswordResetOTP']);
 Route::post('/verify-reset-otp', [UserController::class, 'verifyPasswordResetOTP']);
 Route::post('/reset-password', [UserController::class, 'resetPassword'])->name('password.reset')->middleware('auth.jwt');
 Route::post('/change-password', [UserController::class, 'changePassword'])->name('password.change')->middleware('auth.jwt');
+
+Route::get('/company/{id}', [CompanyController::class, 'show'])->name('company.show')->middleware('auth.jwt');
+Route::post('/company', [CompanyController::class, 'update'])->name('company.update')->middleware('auth.jwt');
+Route::post('/company/activity/{id}', [CompanyController::class, 'updateActivity'])->name('company.update.activity')->middleware('auth.jwt');
+Route::post('/company/restrict', [CompanyController::class, 'restrict'])->name('company.restrict')->middleware('auth.jwt');
 
 Route::get('/user/profile', [ProfileController::class, 'show'])->name('profile.show')->middleware('auth.jwt');
 Route::post('/user/profile', [ProfileController::class, 'update'])->name('profile.update')->middleware('auth.jwt');
@@ -69,7 +76,8 @@ Route::delete('/job-category/{id}', [JobCategoryController::class, 'delete'])->n
 Route::post('/job', [JobController::class, 'create'])->name('job.create')->middleware('auth.jwt');
 Route::post('/job/{id}', [JobController::class, 'update'])->name('job.update')->middleware('auth.jwt');
 Route::post('/job/{id}/availability', [JobController::class, 'updateAvailability'])->name('job.availability.update')->middleware('auth.jwt');
-Route::post('/job/{id}/status', [JobController::class, 'updateStatus'])->name('job.status.update')->middleware('auth.jwt');
+Route::post('/approve-job', [JobController::class, 'approve'])->name('job.approve')->middleware('auth.jwt');
+Route::post('/restrict-job', [JobController::class, 'restrict'])->name('job.restrict')->middleware('auth.jwt');
 Route::get('/job/{id}', [JobController::class, 'show'])->name('job.show')->middleware('auth.jwt');
 Route::get('/job/category/{categoryId}', [JobController::class, 'showAll'])->name('job.showAll')->middleware('auth.jwt');
 Route::get('/job', [JobController::class, 'search'])->name('job.search')->middleware('auth.jwt');

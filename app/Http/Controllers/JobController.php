@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\ResponseHelper;
+use App\Models\Company;
 use App\Models\Job;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class JobController extends Controller
 {
@@ -110,19 +112,58 @@ class JobController extends Controller
         }
     }
 
-    public function updateStatus(Request $request, string $id)
+    public function approve(Request $request)
     {
         try {
             $request->validate([
-                'status' => ['required', 'in:AVAILABLE,RESTRICTED'],
+                'id' => ['required'],
+                'companyId' => ['required'],
             ]);
 
-            $data = Job::where(['id' => $id])->update(['status' => $request->status]);
+            DB::beginTransaction();
+
+            $data = Job::where(['id' => $request->id])->update(['status' => "AVAILABLE"]);
+
+            $jobsPosted = Job::where('company_id', $request->companyId)->whereNotIn('status', ['PENDING', 'RESTRICTED'])->count();
+
+            Company::where('id', $request->companyId)->update(['jobsPosted' => $jobsPosted]);
+
+            DB::commit();
 
             return ResponseHelper::make(
                 'success',
                 null,
-                $data
+                'Job approved!'
+            );
+
+        } catch (Exception $exception) {
+            return ResponseHelper::make('fail', null, $exception->getMessage());
+        }
+    }
+
+    public function restrict(Request $request)
+    {
+        try {
+            $request->validate([
+                'id' => ['required'],
+                'companyId' => ['required'],
+                'restrictionFeedback' => ['required'],
+            ]);
+
+            DB::beginTransaction();
+
+            $data = Job::where(['id' => $request->id])->update(['status' => "RESTRICTED", 'restrictionFeedback' => $request->restrictionFeedback]);
+
+            $jobsPosted = Job::where('company_id', $request->companyId)->whereNotIn('status', ['PENDING', 'RESTRICTED'])->count();
+
+            Company::where('id', $request->companyId)->update(['jobsPosted' => $jobsPosted]);
+
+            DB::commit();
+
+            return ResponseHelper::make(
+                'success',
+                null,
+                'Job has been restricted!'
             );
 
         } catch (Exception $exception) {
@@ -133,7 +174,7 @@ class JobController extends Controller
     public function show(string $id)
     {
         try {
-            $data = Job::find($id);
+            $data = Job::with('company')->find($id);
 
             return ResponseHelper::make(
                 'success',
@@ -145,10 +186,18 @@ class JobController extends Controller
         }
     }
 
-    public function showAll(string $categoryId)
+    public function showAll(Request $request, string $categoryId)
     {
         try {
-            $data = Job::where(['job_category_id' => $categoryId, 'status' => 'available'])->paginate(20);
+            $q = Job::where(['job_category_id' => $categoryId, 'status' => 'available']);
+
+            if ($request->query('skill'))
+                $q = $q->where('skills', 'LIKE', "%{$request->query('skill')},%");
+
+            if ($request->query('type'))
+                $q = $q->where('type', '=', $request->query('type'));
+
+            $data = $q->with('company')->paginate(20);
 
             return ResponseHelper::make(
                 'success',
@@ -171,7 +220,7 @@ class JobController extends Controller
             if ($request->query('type'))
                 $q = $q->where('type', '=', $request->query('type'));
 
-            $data = $q->paginate(20);
+            $data = $q->with('company')->paginate(20);
 
             return ResponseHelper::make(
                 'success',
@@ -212,7 +261,7 @@ class JobController extends Controller
     public function getJobsByStatus(string $status)
     {
         try {
-            $data = Job::where('status', $status)->paginate(20);
+            $data = Job::where('status', $status)->with('company')->paginate(20);
 
             return ResponseHelper::make(
                 'success',
