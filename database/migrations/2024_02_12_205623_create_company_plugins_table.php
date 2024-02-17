@@ -25,7 +25,7 @@ return new class extends Migration
                 ->cascadeOnDelete();
 
             $table->enum('status', ['PENDING', 'ACTIVE', 'INACTIVE', 'REJECTED']);
-            $table->text('rejectionFeedback');
+            $table->text('rejectionFeedback')->nullable();
 
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();

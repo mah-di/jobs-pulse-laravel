@@ -72,6 +72,21 @@ class CompanyController extends Controller
         }
     }
 
+    public function isActive(Request $request)
+    {
+        try {
+            $data = $request->user()->company()->where('status', 'ACTIVE')->exists();
+
+            return ResponseHelper::make(
+                'success',
+                $data
+            );
+
+        } catch (Exception $exception) {
+            return ResponseHelper::make('fail', null, $exception->getMessage());
+        }
+    }
+
     public function updateActivity(Request $request, string $id)
     {
         try {
@@ -102,7 +117,7 @@ class CompanyController extends Controller
                 'id' => ['required'],
             ]);
 
-            Company::where('id', $request->id)->update(['status' => 'ACTIVE']);
+            Company::where('id', $request->id)->update(['status' => 'ACTIVE', 'restrictionFeedback' => null]);
 
             return ResponseHelper::make(
                 'success',

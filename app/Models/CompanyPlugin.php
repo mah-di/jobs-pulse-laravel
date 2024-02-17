@@ -13,6 +13,12 @@ class CompanyPlugin extends Model
         'company_id',
         'plugin_id',
         'status',
+        'rejectionFeedback',
+    ];
+
+    protected $attributes = [
+        'status' => 'PENDING',
+        'rejectionFeedback' => null,
     ];
 
     public function company()

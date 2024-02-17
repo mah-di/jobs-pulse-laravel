@@ -23,6 +23,11 @@ class Company extends Model
         'restrictionFeedback',
     ];
 
+    protected $attributes = [
+        'status' => 'PENDING',
+        'restrictionFeedback' => null,
+    ];
+
     public function employees()
     {
         return $this->hasMany(User::class)->whereNotIn('role', ['Super Admin', 'Admin']);

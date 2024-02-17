@@ -9,8 +9,8 @@ class ImageHelper
     public static function save(UploadedFile $file, string $folderName)
     {
         $filename = uuid_create() . '.' . $file->getClientOriginalExtension();
-        $fileUrl = "storage/uploads/{$folderName}}/{$filename}";
-        $file->storeAs("uploads/{$folderName}}", $filename);
+        $fileUrl = "storage/uploads/{$folderName}/{$filename}";
+        $file->storeAs("uploads/{$folderName}", $filename);
 
         return $fileUrl;
     }

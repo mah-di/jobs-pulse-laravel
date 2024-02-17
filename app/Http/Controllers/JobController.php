@@ -122,7 +122,7 @@ class JobController extends Controller
 
             DB::beginTransaction();
 
-            $data = Job::where(['id' => $request->id])->update(['status' => "AVAILABLE"]);
+            $data = Job::where(['id' => $request->id])->update(['status' => "AVAILABLE", 'restrictionFeedback' => null]);
 
             $jobsPosted = Job::where('company_id', $request->companyId)->whereNotIn('status', ['PENDING', 'RESTRICTED'])->count();
 

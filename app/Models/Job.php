@@ -24,6 +24,7 @@ class Job extends Model
 
     protected $attributes = [
         'status' => 'PENDING',
+        'restrictionFeedback' => null,
     ];
 
     public function jobCategory()

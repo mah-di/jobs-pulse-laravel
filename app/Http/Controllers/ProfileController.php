@@ -14,11 +14,12 @@ class ProfileController extends Controller
     public function show(Request $request)
     {
         try {
-            $profile = $request->user()->profile;
+            $user = $request->user();
+            $user->profile;
 
             return ResponseHelper::make(
                 'success',
-                $profile,
+                $user,
             );
 
         } catch (Exception $exception) {
