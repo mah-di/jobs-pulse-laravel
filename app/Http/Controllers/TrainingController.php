@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ImageHelper;
 use App\Helpers\ResponseHelper;
 use App\Models\Training;
 use Exception;
@@ -28,12 +29,8 @@ class TrainingController extends Controller
 
             $url = null;
 
-            if ($request->hasFile('certificate')) {
-                $img = $request->file('certificate');
-                $filename = uuid_create() . '.' . $img->getClientOriginalExtension();
-                $url = "storage/uploads/certificates/{$filename}";
-                $img->storeAs('uploads/certificates', $filename);
-            }
+            if ($request->hasFile('certificate'))
+                $url = ImageHelper::save($request->file('certificate'), 'certificates');
 
             $data = Training::create([
                     'candidate_profile_id' => $candidateProfileId,
@@ -74,13 +71,9 @@ class TrainingController extends Controller
             $certificate = $training->certificate;
 
             if ($request->hasFile('certificate')) {
-                if ($certificate and File::exists(public_path($certificate)))
-                    File::delete(public_path($certificate));
+                ImageHelper::delete($certificate);
 
-                $img = $request->file('certificate');
-                $filename = uuid_create() . '.' . $img->getClientOriginalExtension();
-                $certificate = "storage/uploads/certificates/{$filename}";
-                $img->storeAs('uploads/certificates', $filename);
+                $certificate = ImageHelper::save($request->file('certificate'), 'certificates');
             }
 
             $data = Training::where('id', $id)->update([
@@ -141,8 +134,7 @@ class TrainingController extends Controller
             if ($candidateProfileId !== $training->candidate_profile_id)
                 throw new Exception("Unauthorized request");
 
-            if ($training->certificate and File::exists(public_path($training->certificate)))
-                File::delete(public_path($training->certificate));
+            ImageHelper::delete($training->certificate);
 
             Training::where('id', $id)->delete();
 

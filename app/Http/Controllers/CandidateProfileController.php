@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ImageHelper;
 use App\Helpers\ResponseHelper;
 use App\Models\CandidateProfile;
 use Exception;
@@ -57,14 +58,9 @@ class CandidateProfileController extends Controller
             $profileImgUrl = $request->profileImg ?? env('DEFAULT_PROFILE_IMG');
 
             if ($request->hasFile('image')) {
-                if ($profileImgUrl !== env('DEFAULT_PROFILE_IMG') and File::exists(public_path($profileImgUrl))) {
-                    File::delete(public_path($profileImgUrl));
-                }
+                ImageHelper::delete($profileImgUrl);
 
-                $img = $request->file('image');
-                $filename = uuid_create() . '.' . $img->getClientOriginalExtension();
-                $profileImgUrl = "storage/uploads/profile-images/{$filename}";
-                $img->storeAs("uploads/profile-images", $filename);
+                $profileImgUrl = ImageHelper::save($request->file('image'), 'profile-images');
             }
 
             $profile = CandidateProfile::updateOrCreate(

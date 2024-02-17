@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\BlogCategoryController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CandidateProfileController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\EducationalDetailController;
@@ -7,6 +9,7 @@ use App\Http\Controllers\JobApplicationController;
 use App\Http\Controllers\JobCategoryController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\JobExperienceController;
+use App\Http\Controllers\PluginController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SavedJobController;
 use App\Http\Controllers\TrainingController;
@@ -44,6 +47,7 @@ Route::post('/change-password', [UserController::class, 'changePassword'])->name
 Route::get('/company/{id}', [CompanyController::class, 'show'])->name('company.show')->middleware('auth.jwt');
 Route::post('/company', [CompanyController::class, 'update'])->name('company.update')->middleware('auth.jwt');
 Route::post('/company/activity/{id}', [CompanyController::class, 'updateActivity'])->name('company.update.activity')->middleware('auth.jwt');
+Route::post('/company/approve', [CompanyController::class, 'approve'])->name('company.approve')->middleware('auth.jwt');
 Route::post('/company/restrict', [CompanyController::class, 'restrict'])->name('company.restrict')->middleware('auth.jwt');
 
 Route::get('/user/profile', [ProfileController::class, 'show'])->name('profile.show')->middleware('auth.jwt');
@@ -95,3 +99,18 @@ Route::get('/candidate/job-applications', [JobApplicationController::class, 'can
 Route::get('/job/save/{jobId}', [SavedJobController::class, 'create'])->name('saved.job.create')->middleware('auth.jwt');
 Route::delete('/job/save/{jobId}', [SavedJobController::class, 'delete'])->name('saved.job.delete')->middleware('auth.jwt');
 Route::get('/saved-jobs', [SavedJobController::class, 'showAll'])->name('saved.job.showAll')->middleware('auth.jwt');
+
+Route::get('plugin', [PluginController::class, 'index'])->name('plugin.index')->middleware('auth.jwt');
+Route::post('plugin', [PluginController::class, 'update'])->name('plugin.update')->middleware('auth.jwt');
+
+Route::get('/blog-category/{companyId}/company', [BlogCategoryController::class, 'index'])->name('blog.category.index')->middleware('auth.jwt');
+Route::post('/blog-category', [BlogCategoryController::class, 'save'])->name('blog.category.save')->middleware('auth.jwt');
+Route::get('/blog-category/{id}', [BlogCategoryController::class, 'show'])->name('blog.category.show')->middleware('auth.jwt');
+Route::delete('/blog-category/{id}', [BlogCategoryController::class, 'delete'])->name('blog.category.delete')->middleware('auth.jwt');
+
+Route::get('/blog/index/{companyId}', [BlogController::class, 'index'])->name('blog.index.by.company')->middleware('auth.jwt');
+Route::get('/blog/category/{categoryId}', [BlogController::class, 'indexByCategory'])->name('blog.index.by.category')->middleware('auth.jwt');
+Route::get('/blog/{id}', [BlogController::class, 'show'])->name('blog.show')->middleware('auth.jwt');
+Route::post('/blog/create/{categoryId}', [BlogController::class, 'create'])->name('blog.create')->middleware('auth.jwt');
+Route::post('/blog/{id}', [BlogController::class, 'update'])->name('blog.update')->middleware('auth.jwt');
+Route::delete('/blog/{id}', [BlogController::class, 'delete'])->name('blog.delete')->middleware('auth.jwt');

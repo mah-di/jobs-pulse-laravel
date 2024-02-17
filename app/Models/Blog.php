@@ -11,7 +11,7 @@ class Blog extends Model
 
     protected $fillable = [
         'company_id',
-        'user_id',
+        'profile_id',
         'blog_category_id',
         'title',
         'body',

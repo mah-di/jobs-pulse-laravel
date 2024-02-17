@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ImageHelper;
 use App\Helpers\JWTHelper;
 use App\Helpers\ResponseHelper;
 use App\Mail\OTPMail;
@@ -37,21 +38,13 @@ class UserController extends Controller
                 'userProfileImg' => ['nullable', FileRule::image()->max(2048)],
             ]);
 
-            if ($request->hasFile('comLogo')) {
-                $logo = $request->file('comLogo');
-                $filename = uuid_create() . '.' . $logo->getClientOriginalExtension();
-                $logoUrl = "storage/uploads/company-logos/{$filename}";
-                $logo->storeAs("uploads/company-logos", $filename);
-            }
+            if ($request->hasFile('comLogo'))
+                $logoUrl = ImageHelper::save($request->file('comLogo'), 'company-logos');
 
             $profileImgUrl = env('DEFAULT_PROFILE_IMG');
 
-            if ($request->hasFile('userProfileImg')) {
-                $profileImg = $request->file('userProfileImg');
-                $filename = uuid_create() . '.' . $profileImg->getClientOriginalExtension();
-                $profileImgUrl = "storage/uploads/profile-images/{$filename}";
-                $profileImg->storeAs("uploads/profile-images", $filename);
-            }
+            if ($request->hasFile('userProfileImg'))
+                $logoUrl = ImageHelper::save($request->file('userProfileImg'), 'profile-images');
 
             DB::beginTransaction();
 

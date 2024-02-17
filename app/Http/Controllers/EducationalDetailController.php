@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ImageHelper;
 use App\Helpers\ResponseHelper;
 use App\Models\EducationalDetail;
 use Exception;
@@ -35,13 +36,9 @@ class EducationalDetailController extends Controller
             ]);
 
             if ($request->hasFile('certificate')) {
-                if (File::exists(public_path($certificate)))
-                    File::delete(public_path($certificate));
+                ImageHelper::delete($certificate);
 
-                $img = $request->file('certificate');
-                $filename = uuid_create() . '.' . $img->getClientOriginalExtension();
-                $certificate = "storage/uploads/certificates/{$filename}";
-                $img->storeAs('uploads/certificates', $filename);
+                $certificate = ImageHelper::save($request->file('certificate'), 'certificates');
             }
 
             $data = EducationalDetail::updateOrCreate(

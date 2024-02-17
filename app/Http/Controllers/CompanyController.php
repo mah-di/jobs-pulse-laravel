@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ImageHelper;
 use App\Helpers\ResponseHelper;
 use App\Models\Company;
 use Exception;
@@ -44,13 +45,9 @@ class CompanyController extends Controller
             $logoUrl = $request->logoUrl;
 
             if ($request->hasFile('logo')) {
-                if (File::exists(public_path($logoUrl)))
-                    File::delete(public_path($logoUrl));
+                ImageHelper::delete($logoUrl);
 
-                $img = $request->file('logo');
-                $filename = uuid_create() . '.' . $img->getClientOriginalExtension();
-                $logoUrl = "storage/uploads/company-logos/{$filename}";
-                $img->storeAs("uploads/company-logos", $filename);
+                $logoUrl = ImageHelper::save($request->file('logo'), 'company-logos');
             }
 
             Company::where('id', $request->user()->company_id)->update([
@@ -91,6 +88,26 @@ class CompanyController extends Controller
                 'success',
                 null,
                 'Company status set to ' . strtolower($request->status)
+            );
+
+        } catch (Exception $exception) {
+            return ResponseHelper::make('fail', null, $exception->getMessage());
+        }
+    }
+
+    public function approve(Request $request)
+    {
+        try {
+            $request->validate([
+                'id' => ['required'],
+            ]);
+
+            Company::where('id', $request->id)->update(['status' => 'ACTIVE']);
+
+            return ResponseHelper::make(
+                'success',
+                null,
+                'Company has been approved!'
             );
 
         } catch (Exception $exception) {
