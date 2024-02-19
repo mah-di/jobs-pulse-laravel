@@ -27,13 +27,30 @@ class SavedJobController extends Controller
         }
     }
 
-    public function delete(Request $request, string $id)
+    public function delete(Request $request, string $jobId)
     {
         try {
             $user = $request->user();
 
-            $user->savedJobs()->detach($id);
-            $user->save();
+            $user->savedJobs()->detach($jobId);
+
+            return ResponseHelper::make(
+                'success',
+                $user,
+                'Job removed from Saved Jobs!'
+            );
+
+        } catch (Exception $exception) {
+            return ResponseHelper::make('fail', null, $exception->getMessage());
+        }
+    }
+
+    public function deleteAll(Request $request)
+    {
+        try {
+            $user = $request->user();
+
+            $user->savedJobs()->detach();
 
             return ResponseHelper::make(
                 'success',

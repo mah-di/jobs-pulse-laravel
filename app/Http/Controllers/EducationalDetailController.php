@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\ImageHelper;
 use App\Helpers\ResponseHelper;
+use App\Models\CandidateProfile;
 use App\Models\EducationalDetail;
 use Exception;
 use Illuminate\Http\Request;
@@ -24,9 +25,6 @@ class EducationalDetailController extends Controller
             ]);
 
             $candidateProfileId = $request->user()->candidateProfile()->pluck('id')->first();
-
-            if (!$candidateProfileId)
-                throw new Exception("Please save your profile informaion first");
 
             $certificate = EducationalDetail::where(['candidate_profile_id' => $candidateProfileId, 'degreeType' => $request->degreeType])->pluck('certificate')->first();
             $rule = $certificate ? 'nullable' : 'required';
@@ -65,25 +63,18 @@ class EducationalDetailController extends Controller
         }
     }
 
-    public function show(Request $request, string $id)
+    public function show(Request $request, EducationalDetail $education)
     {
-        try {
-            $data = EducationalDetail::find($id);
-
-            return ResponseHelper::make(
-                'success',
-                $data,
-            );
-
-        } catch (Exception $exception) {
-            return ResponseHelper::make('fail', null, $exception->getMessage());
-        }
+        return ResponseHelper::make(
+            'success',
+            $education,
+        );
     }
 
-    public function showAll(Request $request, string $profileId)
+    public function showAll(Request $request, CandidateProfile $profile)
     {
         try {
-            $data = EducationalDetail::where(['candidate_profile_id' => $profileId])->get();
+            $data = EducationalDetail::where(['candidate_profile_id' => $profile->id])->get();
 
             return ResponseHelper::make(
                 'success',

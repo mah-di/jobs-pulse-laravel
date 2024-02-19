@@ -34,7 +34,7 @@ class TokenAuthenticate
             if (!$payload->verified and !$request->routeIs('verify') and !$request->routeIs('resend.otp'))
                 throw new Exception("Please verify your account first.");
 
-            if ($payload->verified and $request->routeIs('verify') or $request->routeIs('resend.otp'))
+            if ($payload->verified and ($request->routeIs('verify') or $request->routeIs('resend.otp')))
                 throw new Exception("Access denied.");
 
             $user = User::find($payload->userID);

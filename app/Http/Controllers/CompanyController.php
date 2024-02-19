@@ -87,17 +87,14 @@ class CompanyController extends Controller
         }
     }
 
-    public function updateActivity(Request $request, string $id)
+    public function updateActivity(Request $request, Company $company)
     {
         try {
             $request->validate([
                 'status' => ['required', 'in:ACTIVE,INACTIVE']
             ]);
 
-            if (!$request->user()->isSuperUper and ($request->user()->company_id != $id or $request->user()->company()->whereIn('status', ['PENDING', 'RESTRICTED'])->exists()))
-                throw new Exception("Unauthorized request");
-
-            Company::where('id', $id)->update(['status' => $request->status]);
+            $company->update(['status' => $request->status]);
 
             return ResponseHelper::make(
                 'success',

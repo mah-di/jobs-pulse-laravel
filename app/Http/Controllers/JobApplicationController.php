@@ -42,23 +42,14 @@ class JobApplicationController extends Controller
         }
     }
 
-    public function updateStatus(Request $request, string $id)
+    public function updateStatus(Request $request, JobApplication $application)
     {
         try {
             $request->validate([
                 'status' => ['required', 'in:ACCEPTED,REJECTED']
             ]);
 
-            $application = JobApplication::find($id);
-
-            if (!$application)
-                throw new Exception("Invalid request");
-
-            if ($application->job()->pluck('company_id')->first() !== $request->user()->company_id)
-                throw new Exception("Unauthorized request");
-
-            $application->status = $request->status;
-            $application->save();
+            $application->update(['status' => $request->status]);
 
             return ResponseHelper::make(
                 'success',
@@ -71,15 +62,10 @@ class JobApplicationController extends Controller
         }
     }
 
-    public function delete(Request $request, string $id)
+    public function delete(Request $request, JobApplication $application)
     {
         try {
-            $candidateId = $request->user()->candidateProfile()->pluck('id')->first();
-
-            $result = JobApplication::where(['id' => $id, 'candidate_profile_id' => $candidateId])->whereNot('status', 'ACCEPTED')->delete();
-
-            if (!$result)
-                throw new Exception("Unauthorized request.");
+            $application->delete();
 
             return ResponseHelper::make(
                 'success',
@@ -114,15 +100,10 @@ class JobApplicationController extends Controller
         }
     }
 
-    public function receivedApplications(Request $request, string $jobId)
+    public function receivedApplications(Request $request, Job $job)
     {
         try {
-            $exists = Job::where(['id' => $jobId, 'company_id' => $request->user()->company_id])->exists();
-
-            if (!$exists)
-                throw new Exception("Unauthorized request");
-
-            $q = JobApplication::where('job_id', $jobId);
+            $q = JobApplication::where('job_id', $job->id);
 
             if ($request->query('status'))
                 $q = $q->where('status', $request->query('status'));

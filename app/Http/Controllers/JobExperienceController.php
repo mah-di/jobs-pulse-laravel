@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\ResponseHelper;
+use App\Models\CandidateProfile;
 use App\Models\JobExperience;
 use Exception;
 use Illuminate\Http\Request;
@@ -26,9 +27,6 @@ class JobExperienceController extends Controller
 
             $candidateProfileId = $request->user()->candidateProfile()->pluck('id')->first();
 
-            if (!$candidateProfileId)
-                throw new Exception("Please save your profile informaion first");
-
             $data = JobExperience::create([
                     'candidate_profile_id' => $candidateProfileId,
                     'designation' => $request->designation,
@@ -50,7 +48,7 @@ class JobExperienceController extends Controller
         }
     }
 
-    public function update(Request $request, string $id)
+    public function update(Request $request, JobExperience $experience)
     {
         try {
             $request->validate([
@@ -65,14 +63,7 @@ class JobExperienceController extends Controller
             if (!$request->isCurrentJob and !$request->quittingDate)
                 throw new Exception("Quitting Date is required");
 
-            $candidateProfileId = $request->user()->candidateProfile()->pluck('id')->first();
-
-            $profileId = JobExperience::where('id', $id)->pluck('candidate_profile_id')->first();
-
-            if ($candidateProfileId !== $profileId)
-                throw new Exception("Unauthorized request");
-
-            $data = JobExperience::where('id', $id)->update([
+            $experience->update([
                     'designation' => $request->designation,
                     'company' => $request->company,
                     'jobDetails' => $request->jobDetails,
@@ -92,10 +83,18 @@ class JobExperienceController extends Controller
         }
     }
 
-    public function show(Request $request, string $id)
+    public function show(Request $request, JobExperience $experience)
+    {
+        return ResponseHelper::make(
+            'success',
+            $experience,
+        );
+    }
+
+    public function showAll(Request $request, CandidateProfile $profile)
     {
         try {
-            $data = JobExperience::find($id);
+            $data = JobExperience::where(['candidate_profile_id' => $profile->id])->get();
 
             return ResponseHelper::make(
                 'success',
@@ -107,32 +106,10 @@ class JobExperienceController extends Controller
         }
     }
 
-    public function showAll(Request $request, string $profileId)
+    public function delete(Request $request, JobExperience $experience)
     {
         try {
-            $data = JobExperience::where(['candidate_profile_id' => $profileId])->get();
-
-            return ResponseHelper::make(
-                'success',
-                $data,
-            );
-
-        } catch (Exception $exception) {
-            return ResponseHelper::make('fail', null, $exception->getMessage());
-        }
-    }
-
-    public function delete(Request $request, string $id)
-    {
-        try {
-            $candidateProfileId = $request->user()->candidateProfile()->pluck('id')->first();
-
-            $profileId = JobExperience::where('id', $id)->pluck('candidate_profile_id')->first();
-
-            if ($candidateProfileId !== $profileId)
-                throw new Exception("Unauthorized request");
-
-            JobExperience::where('id', $id)->delete();
+            $experience->delete();
 
             return ResponseHelper::make(
                 'success',

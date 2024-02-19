@@ -69,10 +69,10 @@ class BlogCategoryController extends Controller
         }
     }
 
-    public function delete(string $id)
+    public function delete(BlogCategory $category)
     {
         try {
-            BlogCategory::where('id', $id)->delete();
+            $category->delete();
 
             return ResponseHelper::make(
                 'success',

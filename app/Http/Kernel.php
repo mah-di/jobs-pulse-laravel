@@ -66,5 +66,10 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
 
         'auth.jwt' => \App\Http\Middleware\TokenAuthenticate::class,
+        'superUser.check' => \App\Http\Middleware\SuperUserCheck::class,
+        'companyUser.check' => \App\Http\Middleware\CompanyUserCheck::class,
+        'candidate.check' => \App\Http\Middleware\CandidateCheck::class,
+        'restrict.candidate' => \App\Http\Middleware\RestrictCandidate::class,
+        'check.profile' => \App\Http\Middleware\CheckCandidateProfile::class,
     ];
 }

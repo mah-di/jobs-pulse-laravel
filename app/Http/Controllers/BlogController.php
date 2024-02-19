@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\ImageHelper;
 use App\Helpers\ResponseHelper;
 use App\Models\Blog;
+use App\Models\BlogCategory;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\File as FileRule;
@@ -56,7 +57,7 @@ class BlogController extends Controller
         }
     }
 
-    public function create(Request $request, string $categoryId)
+    public function create(Request $request, BlogCategory $category)
     {
         try {
             $request->validate([
@@ -75,7 +76,7 @@ class BlogController extends Controller
             $data = Blog::create([
                 'company_id' => $user->company_id,
                 'profile_id' => $user->profile()->pluck('id')->first(),
-                'blog_category_id' => $categoryId,
+                'blog_category_id' => $category->id,
                 'title' => $request->title,
                 'body' => $request->body,
                 'coverImg' => $coverImgUrl,
@@ -92,7 +93,7 @@ class BlogController extends Controller
         }
     }
 
-    public function update(Request $request, string $id)
+    public function update(Request $request, Blog $blog)
     {
         try {
             $request->validate([
@@ -111,9 +112,7 @@ class BlogController extends Controller
                 $coverImgUrl = ImageHelper::save($request->file('image'), 'blog-covers');
             }
 
-            $user = $request->user();
-
-            $data = Blog::where('id', $id)->update([
+            $blog->update([
                 'blog_category_id' => $request->blog_category_id,
                 'title' => $request->title,
                 'body' => $request->body,
@@ -123,7 +122,7 @@ class BlogController extends Controller
             return ResponseHelper::make(
                 'success',
                 null,
-                $data
+                'Blog updated!'
             );
 
         } catch (Exception $exception) {
@@ -131,19 +130,17 @@ class BlogController extends Controller
         }
     }
 
-    public function delete(string $id)
+    public function delete(Blog $blog)
     {
         try {
-            $imgUrl = Blog::where('id', $id)->pluck('coverImg')->first();
+            ImageHelper::delete($blog->coverImg);
 
-            ImageHelper::delete($imgUrl);
-
-            $data = Blog::where('id', $id)->delete();
+            $blog->delete();
 
             return ResponseHelper::make(
                 'success',
                 null,
-                $data
+                'Blog deleted!'
             );
 
         } catch (Exception $exception) {

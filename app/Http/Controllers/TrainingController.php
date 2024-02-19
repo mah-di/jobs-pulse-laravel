@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\ImageHelper;
 use App\Helpers\ResponseHelper;
+use App\Models\CandidateProfile;
 use App\Models\Training;
 use Exception;
 use Illuminate\Http\Request;
@@ -24,19 +25,16 @@ class TrainingController extends Controller
 
             $candidateProfileId = $request->user()->candidateProfile()->pluck('id')->first();
 
-            if (!$candidateProfileId)
-                throw new Exception("Please save your profile informaion first");
-
-            $url = null;
+            $imgPath = null;
 
             if ($request->hasFile('certificate'))
-                $url = ImageHelper::save($request->file('certificate'), 'certificates');
+                $imgPath = ImageHelper::save($request->file('certificate'), 'certificates');
 
             $data = Training::create([
                     'candidate_profile_id' => $candidateProfileId,
                     'title' => $request->title,
                     'institution' => $request->institution,
-                    'certificate' => $url,
+                    'certificate' => $imgPath,
                     'completionYear' => $request->completionYear,
                 ]);
 
@@ -51,7 +49,7 @@ class TrainingController extends Controller
         }
     }
 
-    public function update(Request $request, string $id)
+    public function update(Request $request, Training $training)
     {
         try {
             $request->validate([
@@ -61,13 +59,6 @@ class TrainingController extends Controller
                 'completionYear' => ['required', 'numeric', 'gte:1900', 'lte:' . now()->year],
             ]);
 
-            $candidateProfileId = $request->user()->candidateProfile()->pluck('id')->first();
-
-            $training = Training::where('id', $id)->select(['candidate_profile_id', 'certificate'])->first();
-
-            if ($candidateProfileId !== $training->candidate_profile_id)
-                throw new Exception("Unauthorized request");
-
             $certificate = $training->certificate;
 
             if ($request->hasFile('certificate')) {
@@ -76,7 +67,7 @@ class TrainingController extends Controller
                 $certificate = ImageHelper::save($request->file('certificate'), 'certificates');
             }
 
-            $data = Training::where('id', $id)->update([
+            $training->update([
                     'title' => $request->title,
                     'institution' => $request->institution,
                     'certificate' => $certificate,
@@ -94,10 +85,18 @@ class TrainingController extends Controller
         }
     }
 
-    public function show(Request $request, string $id)
+    public function show(Request $request, Training $training)
+    {
+        return ResponseHelper::make(
+            'success',
+            $training,
+        );
+    }
+
+    public function showAll(Request $request, CandidateProfile $profile)
     {
         try {
-            $data = Training::find($id);
+            $data = Training::where(['candidate_profile_id' => $profile->id])->get();
 
             return ResponseHelper::make(
                 'success',
@@ -109,34 +108,12 @@ class TrainingController extends Controller
         }
     }
 
-    public function showAll(Request $request, string $profileId)
+    public function delete(Request $request, Training $training)
     {
         try {
-            $data = Training::where(['candidate_profile_id' => $profileId])->get();
-
-            return ResponseHelper::make(
-                'success',
-                $data,
-            );
-
-        } catch (Exception $exception) {
-            return ResponseHelper::make('fail', null, $exception->getMessage());
-        }
-    }
-
-    public function delete(Request $request, string $id)
-    {
-        try {
-            $candidateProfileId = $request->user()->candidateProfile()->pluck('id')->first();
-
-            $training = Training::where('id', $id)->select(['candidate_profile_id', 'certificate'])->first();
-
-            if ($candidateProfileId !== $training->candidate_profile_id)
-                throw new Exception("Unauthorized request");
-
             ImageHelper::delete($training->certificate);
 
-            Training::where('id', $id)->delete();
+            $training->delete();
 
             return ResponseHelper::make(
                 'success',

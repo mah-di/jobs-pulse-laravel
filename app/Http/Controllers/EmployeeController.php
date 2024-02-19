@@ -103,7 +103,7 @@ class EmployeeController extends Controller
         }
     }
 
-    public function assignRole(Request $request, string $id)
+    public function assignRole(Request $request, User $user)
     {
         try {
             if ($request->user()->isSuperUser)
@@ -111,11 +111,12 @@ class EmployeeController extends Controller
             else
                 $request->validate(['role' => ['required', 'in:Admin,Manager,Editor']]);
 
-            $data = User::where(['id' => $id, 'company_id' => $request->user()->company_id])->update(['role' => $request->role]);
+            $user->update(['role' => $request->role]);
 
             return ResponseHelper::make(
                 'success',
-                $data
+                null,
+                'Employee role updated!'
             );
 
         } catch (Exception $exception) {
@@ -123,14 +124,15 @@ class EmployeeController extends Controller
         }
     }
 
-    public function delete(Request $request, string $id)
+    public function delete(Request $request, User $user)
     {
         try {
-            $data = User::where(['id' => $id, 'company_id' => $request->user()->company_id])->whereNotIn('role', ['Site Admin', 'Admin'])->delete();
+            $user->delete();
 
             return ResponseHelper::make(
                 'success',
-                $data
+                null,
+                'Employee deleted!'
             );
 
         } catch (Exception $exception) {

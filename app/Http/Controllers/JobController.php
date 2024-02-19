@@ -48,7 +48,7 @@ class JobController extends Controller
         }
     }
 
-    public function update(Request $request, string $id)
+    public function update(Request $request, Job $job)
     {
         try {
             $request->validate([
@@ -61,9 +61,7 @@ class JobController extends Controller
                 'deadline' => ['required', 'date'],
             ]);
 
-            $companyId = $request->user()->company_id;
-
-            $data = Job::where(['id' => $id, 'company_id' => $companyId])->update([
+            $job->update([
                 'job_category_id' => $request->job_category_id,
                 'title' => $request->title,
                 'description' => $request->description,
@@ -73,13 +71,10 @@ class JobController extends Controller
                 'deadline' => $request->deadline,
             ]);
 
-            if (!$data)
-                throw new Exception("Unauthorized request");
-
             return ResponseHelper::make(
                 'success',
                 null,
-                $data
+                'Job updated!'
             );
 
         } catch (Exception $exception) {
@@ -87,24 +82,19 @@ class JobController extends Controller
         }
     }
 
-    public function updateAvailability(Request $request, string $id)
+    public function updateAvailability(Request $request, Job $job)
     {
         try {
             $request->validate([
                 'status' => ['required', 'in:AVAILABLE,UNAVAILABLE'],
             ]);
 
-            $companyId = $request->user()->company_id;
-
-            $data = Job::where(['id' => $id, 'company_id' => $companyId])->update(['status' => $request->status]);
-
-            if (!$data)
-                throw new Exception("Unauthorized request");
+            $job->update(['status' => $request->status]);
 
             return ResponseHelper::make(
                 'success',
                 null,
-                $data
+                'Job availability set to "' . strtolower($request->status) . '"!'
             );
 
         } catch (Exception $exception) {

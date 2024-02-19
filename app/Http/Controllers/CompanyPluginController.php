@@ -136,17 +136,14 @@ class CompanyPluginController extends Controller
         }
     }
 
-    public function updateStatus(Request $request, string $id)
+    public function updateStatus(Request $request, CompanyPlugin $plugin)
     {
         try {
             $request->validate([
                 'status' => ['required', 'in:ACTIVE,INACTIVE']
             ]);
 
-            $data = CompanyPlugin::where(['id' => $id, 'company_id' => $request->user()->company_id])->whereNotIn('status', ['PENDING', 'REJECTED'])->update(['status' => $request->status]);
-
-            if (!$data)
-                throw new Exception("Invalid action");
+            $plugin->update(['status' => $request->status]);
 
             return ResponseHelper::make(
                 'success',
