@@ -21,28 +21,19 @@ class TokenAuthenticate
     public function handle(Request $request, Closure $next): Response
     {
         try {
-            $token = $request->header('token') ?? $request->cookie('token');
+            if (!$request->user())
+                throw new Exception();
 
-            if ($request->routeIs('password.reset')) $type = 'password.reset';
-            else $type = 'auth.token';
-
-            $payload = JWTHelper::verifyToken($token, $type);
+            $payload = json_decode($request->header('payloadData'));
 
             if (!$payload)
                 throw new Exception();
 
-            if (!$payload->verified and !$request->routeIs('verify') and !$request->routeIs('resend.otp'))
+            if (!$payload->verified and !$request->routeIs('verify.view') and !$request->routeIs('verify.email') and !$request->routeIs('resend.otp'))
                 throw new Exception("Please verify your account first.");
 
-            if ($payload->verified and ($request->routeIs('verify') or $request->routeIs('resend.otp')))
+            if ($payload->verified and ($request->routeIs('verify.view') or $request->routeIs('verify.email') or $request->routeIs('resend.otp')))
                 throw new Exception("Access denied.");
-
-            $user = User::find($payload->userID);
-
-            if (!$user)
-                throw new Exception();
-
-            Auth::setUser($user);
 
             return $next($request);
 

@@ -35,26 +35,27 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/jobs-pulse/admin/login', [UserController::class, 'loginSuperUser']);
+Route::post('/jobs-pulse/admin/login', [UserController::class, 'loginSuperUser'])->name('superUser.login');
 
-Route::post('/company/register', [UserController::class, 'registerCompany']);
-Route::post('/company/login', [UserController::class, 'loginCompany']);
+Route::post('/company/register', [UserController::class, 'registerCompany'])->name('company.register');
+Route::post('/company/login', [UserController::class, 'loginCompany'])->name('company.login');
 
-Route::post('/candidate/register', [UserController::class, 'registerCandidate']);
-Route::post('/candidate/login', [UserController::class, 'loginCandidate']);
+Route::post('/candidate/register', [UserController::class, 'registerCandidate'])->name('candidate.register');
+Route::post('/candidate/login', [UserController::class, 'loginCandidate'])->name('candidate.login');
 
-Route::post('/request-password-reset', [UserController::class, 'sendPasswordResetOTP']);
-Route::post('/verify-reset-otp', [UserController::class, 'verifyPasswordResetOTP']);
+Route::post('/request-password-reset', [UserController::class, 'sendPasswordResetOTP'])->name('send.password.reset.otp');
+Route::post('/verify-reset-otp', [UserController::class, 'verifyPasswordResetOTP'])->name('verify.password.reset.otp');
 
+Route::get('/top-companies', [CompanyController::class, 'topCompanies'])->name('company.top');
 Route::get('/company/{id}', [CompanyController::class, 'show'])->name('company.show');
 
 Route::get('/job-category', [JobCategoryController::class, 'index'])->name('job.category.index');
 Route::get('/job-category/{id}', [JobCategoryController::class, 'show'])->name('job.category.show');
 
 Route::get('/job/{id}', [JobController::class, 'show'])->name('job.show');
-Route::get('/job/category/{categoryId}', [JobController::class, 'showAll'])->name('job.showAll');
+Route::get('/job/latest/{categoryId}', [JobController::class, 'showLatest'])->name('job.showLatest');
 Route::get('/job', [JobController::class, 'search'])->name('job.search');
-Route::get('/company-job', [JobController::class, 'getCompanyJobs'])->name('job.by.company');
+Route::get('/job/company/{companyId}', [JobController::class, 'jobsByCompany'])->name('job.by.company');
 
 Route::get('/job/{id}/applications/count', [JobApplicationController::class, 'receivedApplicationCount'])->name('job.application.count');
 
@@ -68,7 +69,7 @@ Route::get('/blog/{id}', [BlogController::class, 'show'])->name('blog.show');
 Route::middleware('auth.jwt')->group(function () {
     Route::get('/user', [UserController::class, 'getUser'])->name('user.get');
     Route::get('/resend-otp', [UserController::class, 'resendVerificationOTP'])->name('resend.otp');
-    Route::post('/verify-email', [UserController::class, 'verifyEmail'])->name('verify');
+    Route::post('/verify-email', [UserController::class, 'verifyEmail'])->name('verify.email');
     Route::post('/reset-password', [UserController::class, 'resetPassword'])->name('password.reset');
     Route::post('/change-password', [UserController::class, 'changePassword'])->name('password.change');
 
@@ -119,6 +120,7 @@ Route::middleware('auth.jwt')->group(function () {
 
         Route::post('/job-application/{application}/update-status', [JobApplicationController::class, 'updateStatus'])->name('job.application.update')->can('update', 'application');
         Route::get('/job/{job}/applications', [JobApplicationController::class, 'receivedApplications'])->name('job.application.received')->can('viewApplications', 'job');
+        Route::get('/company-job', [JobController::class, 'getCompanyJobs'])->name('job.by.company');
 
         Route::get('/company/activity/check', [CompanyController::class, 'isActive'])->name('company.check');
 

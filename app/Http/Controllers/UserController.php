@@ -57,7 +57,6 @@ class UserController extends Controller
                 'email' => $request->comEmail,
                 'website' => $request->comWebsite,
                 'establishDate' => $request->comEstablishDate,
-                'status' => 'pending',
             ]);
 
             $otp = rand(100000, 999999);
@@ -65,7 +64,7 @@ class UserController extends Controller
             $user = User::create([
                 'company_id' => $company->id,
                 'email' => $request->userEmail,
-                'role' => 'admin',
+                'role' => 'Admin',
                 'password' => $request->userPassword,
                 'otp' => $otp,
             ]);
@@ -108,7 +107,7 @@ class UserController extends Controller
             $user = User::create([
                 'company_id' => null,
                 'email' => $request->email,
-                'role' => 'candidate',
+                'role' => 'Candidate',
                 'password' => $request->password,
                 'otp' => $otp,
             ]);
@@ -146,7 +145,7 @@ class UserController extends Controller
 
             return ResponseHelper::make(
                 'success',
-                null,
+                $user,
                 'Login successful!',
                 ['token' => $token]
             )->cookie('token', $token, 60*24*30);
@@ -171,9 +170,11 @@ class UserController extends Controller
 
             $token = JWTHelper::createToken($user);
 
+            $companyStatus = $user->company()->pluck('status')->first();
+
             return ResponseHelper::make(
                 'success',
-                null,
+                compact(['user', 'companyStatus']),
                 'Login successful!',
                 ['token' => $token]
             )->cookie('token', $token, 60*24*30);
@@ -200,7 +201,7 @@ class UserController extends Controller
 
             return ResponseHelper::make(
                 'success',
-                null,
+                $user,
                 'Login successful!',
                 ['token' => $token]
             )->cookie('token', $token, 60*24*30);
@@ -247,9 +248,11 @@ class UserController extends Controller
 
             $token = JWTHelper::createToken($user);
 
+            $companyStatus = $user->company()->pluck('status')->first();
+
             return ResponseHelper::make(
                 'success',
-                null,
+                compact(['user', 'companyStatus']),
                 'Email verification successful!',
                 ['token' => $token]
             )->cookie('token', $token, 60*24*30);

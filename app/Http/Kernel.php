@@ -36,12 +36,16 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+
+            \App\Http\Middleware\ReadTokenSetUser::class,
         ],
 
         'api' => [
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             \Illuminate\Routing\Middleware\ThrottleRequests::class.':api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+
+            \App\Http\Middleware\ReadTokenSetUser::class,
         ],
     ];
 
@@ -66,6 +70,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
 
         'auth.jwt' => \App\Http\Middleware\TokenAuthenticate::class,
+        'redirect.anon' => \App\Http\Middleware\RedirectAnonymousUser::class,
         'superUser.check' => \App\Http\Middleware\SuperUserCheck::class,
         'companyUser.check' => \App\Http\Middleware\CompanyUserCheck::class,
         'candidate.check' => \App\Http\Middleware\CandidateCheck::class,

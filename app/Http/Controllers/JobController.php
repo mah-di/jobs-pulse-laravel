@@ -176,18 +176,10 @@ class JobController extends Controller
         }
     }
 
-    public function showAll(Request $request, string $categoryId)
+    public function showLatest(Request $request, string $categoryId)
     {
         try {
-            $q = Job::where(['job_category_id' => $categoryId, 'status' => 'available']);
-
-            if ($request->query('skill'))
-                $q = $q->where('skills', 'LIKE', "%{$request->query('skill')},%");
-
-            if ($request->query('type'))
-                $q = $q->where('type', '=', $request->query('type'));
-
-            $data = $q->with('company')->paginate(20);
+            $data = Job::where(['job_category_id' => $categoryId, 'status' => 'available'])->latest()->with('company')->take(5)->get();
 
             return ResponseHelper::make(
                 'success',
@@ -204,13 +196,31 @@ class JobController extends Controller
         try {
             $q = Job::where('status', 'available');
 
+            if ($request->query('category'))
+                $q = $q->where('job_category_id', '=', $request->query('category'));
+
             if ($request->query('skill'))
                 $q = $q->where('skills', 'LIKE', "%{$request->query('skill')},%");
 
             if ($request->query('type'))
                 $q = $q->where('type', '=', $request->query('type'));
 
-            $data = $q->with('company')->paginate(20);
+            $data = $q->with('company')->paginate(20)->withQueryString();
+
+            return ResponseHelper::make(
+                'success',
+                $data
+            );
+
+        } catch (Exception $exception) {
+            return ResponseHelper::make('fail', null, $exception->getMessage());
+        }
+    }
+
+    public function jobsByCompany(Request $request, string $companyId)
+    {
+        try {
+            $data = Job::where(['company_id' => $companyId, 'status' => 'AVAILABLE'])->with('company')->paginate(20);
 
             return ResponseHelper::make(
                 'success',

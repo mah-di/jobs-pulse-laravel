@@ -12,6 +12,21 @@ use Illuminate\Validation\Rules\File as FileRule;
 
 class CompanyController extends Controller
 {
+    public function topCompanies()
+    {
+        try {
+            $data = Company::select(['id', 'name', 'logo'])->orderByDesc('jobsPosted')->take(6)->get();
+
+            return ResponseHelper::make(
+                'success',
+                $data
+            );
+
+        } catch (Exception $exception) {
+            return ResponseHelper::make('fail', null, $exception->getMessage());
+        }
+    }
+
     public function show(string $id)
     {
         try {
