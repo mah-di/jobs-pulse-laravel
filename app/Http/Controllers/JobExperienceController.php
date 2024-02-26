@@ -25,6 +25,9 @@ class JobExperienceController extends Controller
             if (!$request->isCurrentJob and !$request->quittingDate)
                 throw new Exception("Quitting Date is required");
 
+            if ($request->isCurrentJob and $request->quittingDate)
+                throw new Exception("Current Job Can't Have a Quitting Date");
+
             $candidateProfileId = $request->user()->candidateProfile()->pluck('id')->first();
 
             $data = JobExperience::create([
@@ -94,7 +97,7 @@ class JobExperienceController extends Controller
     public function showAll(Request $request, CandidateProfile $profile)
     {
         try {
-            $data = JobExperience::where(['candidate_profile_id' => $profile->id])->get();
+            $data = JobExperience::where(['candidate_profile_id' => $profile->id])->orderByDesc('joiningDate')->get();
 
             return ResponseHelper::make(
                 'success',

@@ -17,7 +17,12 @@
                                 <nav class="d-none d-lg-block">
                                     <ul id="navigation">
                                         <li><a href="{{ route('home.view') }}">Home</a></li>
-                                        <li><a href="{{ route('jobs.view') }}">Find Jobs</a></li>
+                                        @auth
+                                            @if (auth()->user()->role === 'Candidate')
+                                            <li><a href="{{ route('candidate.dashboard.view') }}">Dashboard</a></li>
+                                            @endif
+                                        @endauth
+                                        <li><a href="{{ route('jobs.view') }}">Job Listing</a></li>
                                         <li><a href="about.html">About</a></li>
                                         <li><a href="#">Page</a>
                                             <ul class="submenu">

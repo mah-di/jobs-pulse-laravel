@@ -66,7 +66,7 @@ class SavedJobController extends Controller
     public function showAll(Request $request)
     {
         try {
-            $data = $request->user()->savedJobs;
+            $data = $request->user()->savedJobs()->with(['company' => fn($q) => $q->select(['id', 'name'])])->get();
 
             return ResponseHelper::make(
                 'success',

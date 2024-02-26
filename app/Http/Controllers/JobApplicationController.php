@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\ResponseHelper;
 use App\Models\Job;
 use App\Models\JobApplication;
+use App\Models\SavedJob;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -78,6 +79,27 @@ class JobApplicationController extends Controller
         }
     }
 
+    public function candidateOverview(Request $request)
+    {
+        try {
+            $applications = JobApplication::where('candidate_profile_id', $request->user()->candidateProfile()->pluck('id')->first())->select(['status'])->get();
+            $savedJobs = SavedJob::where('user_id', $request->user()->id)->count();
+
+            return ResponseHelper::make(
+                'success',
+                [
+                    'applied' => $applications->count(),
+                    'accepted' => $applications->where('status', 'ACCEPTED')->count(),
+                    'rejected' => $applications->where('status', 'REJECTED')->count(),
+                    'savedJobs' => $savedJobs,
+                ]
+            );
+
+        } catch (Exception $exception) {
+            return ResponseHelper::make('fail', null, $exception->getMessage());
+        }
+    }
+
     public function candidateApplications(Request $request)
     {
         try {
@@ -88,7 +110,7 @@ class JobApplicationController extends Controller
             if ($request->query('status'))
                 $q = $q->where('status', $request->query('status'));
 
-            $data = $q->with('job')->paginate(20);
+            $data = $q->with(['job' => fn ($q) => $q->with(['company' => fn ($q) => $q->select(['id', 'name'])])])->latest()->paginate(20);
 
             return ResponseHelper::make(
                 'success',

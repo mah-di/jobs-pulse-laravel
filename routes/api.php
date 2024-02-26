@@ -160,15 +160,16 @@ Route::middleware('auth.jwt')->group(function () {
 
             Route::post('/training', [TrainingController::class, 'create'])->name('training.create');
             Route::post('/training/{training}', [TrainingController::class, 'update'])->name('training.update')->can('updateOrDelete', 'training');
-            Route::delete('/training/{id}', [TrainingController::class, 'delete'])->name('training.delete')->can('updateOrDelete', 'training');
+            Route::delete('/training/{training}', [TrainingController::class, 'delete'])->name('training.delete')->can('updateOrDelete', 'training');
 
             Route::post('/job-experience', [JobExperienceController::class, 'create'])->name('job.experience.create');
             Route::post('/job-experience/{experience}', [JobExperienceController::class, 'update'])->name('job.experience.update')->can('updateOrDelete', 'experience');
             Route::delete('/job-experience/{experience}', [JobExperienceController::class, 'delete'])->name('job.experience.delete')->can('updateOrDelete', 'experience');
 
             Route::get('/job-application/{jobId}', [JobApplicationController::class, 'create'])->name('job.application.create');
+            Route::get('/candidate/overview', [JobApplicationController::class, 'candidateOverview'])->name('candidate.overview');
             Route::get('/candidate/job-applications', [JobApplicationController::class, 'candidateApplications'])->name('candidate.job.application');
-            Route::delete('/job-application/{id}', [JobApplicationController::class, 'delete'])->name('job.application.delete')->can('delete', 'application');
+            Route::delete('/job-application/{application}', [JobApplicationController::class, 'delete'])->name('job.application.delete')->can('delete', 'application');
         });
 
         Route::get('/job/save/{jobId}', [SavedJobController::class, 'create'])->name('saved.job.create');

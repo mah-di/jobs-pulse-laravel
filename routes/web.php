@@ -32,4 +32,9 @@ Route::middleware(['redirect.anon', 'auth.jwt'])->group(function () {
     Route::get('/reset-password', fn () => view('pages.auth.reset-password'))->name('password.reset.view');
     Route::get('/logout', [UserController::class, 'logout'])->name('logout');
 
+    Route::get('/candidate/profile', fn () => view('pages.candidate.profile'))->name('candidate.profile.view');
+    Route::get('/candidate/dashboard', fn () => view('pages.candidate.dashboard'))->name('candidate.dashboard.view');
+    Route::get('/candidate/applications', fn () => view('pages.candidate.job-applications'))->name('candidate.applications.view');
+    Route::get('/candidate/saved-jobs', fn () => view('pages.candidate.saved-jobs'))->name('candidate.savedJobs.view');
+
 });

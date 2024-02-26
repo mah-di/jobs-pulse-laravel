@@ -74,8 +74,8 @@ class CandidateProfileController extends Controller
                     'motherName' => $request->motherName,
                     'dob' => $request->dob,
                     'address' => $request->address,
-                    'contact' => "+880" . $request->contact,
-                    'emergencyContact' => $request->emergencyContact ? "+880" . $request->emergencyContact : $request->emergencyContact,
+                    'contact' => $request->contact,
+                    'emergencyContact' => $request->emergencyContact,
                     'personalWebsite' => $request->personalWebsite,
                     'whatsapp' => $request->whatsapp,
                     'linkedin' => $request->linkedin,
@@ -92,7 +92,8 @@ class CandidateProfileController extends Controller
 
             return ResponseHelper::make(
                 'success',
-                $profile
+                $profile,
+                'Profile Information Saved!'
             );
 
         } catch (Exception $exception) {
