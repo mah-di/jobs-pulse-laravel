@@ -534,7 +534,7 @@
 
         async function getTraining() {
             showLoader()
-            let res = await axios.get("{{ url('/api/candidate/training') . '/' . auth()->user()->candidateProfile->id }}")
+            let res = await axios.get("{{ url('/api/candidate/training') . '/' . auth()->user()->candidateProfile()->pluck('id')->first() }}")
             hideLoader()
 
             if (res.data['status'] === 'success') {
@@ -584,7 +584,7 @@
 
         async function getExperience() {
             showLoader()
-            let res = await axios.get("{{ url('/api/candidate/job-experience') . '/' . auth()->user()->candidateProfile->id }}")
+            let res = await axios.get("{{ url('/api/candidate/job-experience') . '/' . auth()->user()->candidateProfile()->pluck('id')->first() }}")
             hideLoader()
 
             if (res.data['status'] === 'success') {

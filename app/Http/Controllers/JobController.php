@@ -246,7 +246,7 @@ class JobController extends Controller
             if ($request->query('status'))
                 $q = $q->where('status', '=', $request->query('status'));
 
-            $data = $q->paginate(20);
+            $data = $q->withCount('jobApplications')->orderByDesc('deadline')->paginate(20);
 
             return ResponseHelper::make(
                 'success',

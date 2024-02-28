@@ -111,16 +111,17 @@ Route::middleware('auth.jwt')->group(function () {
     });
 
     Route::middleware('companyUser.check')->group(function () {
+        Route::get('/company-overview', [CompanyController::class, 'companyOverview'])->name('company.overview');
         Route::post('/company', [CompanyController::class, 'update'])->name('company.update')->can('takeManagerialDecision', Company::class);
         Route::post('/company/activity/{company}', [CompanyController::class, 'updateActivity'])->name('company.update.activity')->can('updateActivity', 'company');
 
+        Route::get('/company-job', [JobController::class, 'getCompanyJobs'])->name('company.jobs');
         Route::post('/job', [JobController::class, 'create'])->name('job.create')->can('takeManagerialDecision', Company::class);
         Route::post('/job/{job}', [JobController::class, 'update'])->name('job.update')->can('update', 'job');
         Route::post('/job/{job}/availability', [JobController::class, 'updateAvailability'])->name('job.availability.update')->can('updateAvailability', 'job');
 
-        Route::post('/job-application/{application}/update-status', [JobApplicationController::class, 'updateStatus'])->name('job.application.update')->can('update', 'application');
         Route::get('/job/{job}/applications', [JobApplicationController::class, 'receivedApplications'])->name('job.application.received')->can('viewApplications', 'job');
-        Route::get('/company-job', [JobController::class, 'getCompanyJobs'])->name('job.by.company');
+        Route::post('/job-application/{application}/update-status', [JobApplicationController::class, 'updateStatus'])->name('job.application.update')->can('update', 'application');
 
         Route::get('/company/activity/check', [CompanyController::class, 'isActive'])->name('company.check');
 
@@ -152,6 +153,7 @@ Route::middleware('auth.jwt')->group(function () {
     });
 
     Route::middleware('candidate.check')->group(function () {
+        Route::get('/candidate/overview', [JobApplicationController::class, 'candidateOverview'])->name('candidate.overview');
         Route::get('/candidate/profile', [CandidateProfileController::class, 'show'])->name('candidate.profile.show');
         Route::post('/candidate/profile', [CandidateProfileController::class, 'save'])->name('candidate.profile.save');
 
@@ -167,7 +169,6 @@ Route::middleware('auth.jwt')->group(function () {
             Route::delete('/job-experience/{experience}', [JobExperienceController::class, 'delete'])->name('job.experience.delete')->can('updateOrDelete', 'experience');
 
             Route::get('/job-application/{jobId}', [JobApplicationController::class, 'create'])->name('job.application.create');
-            Route::get('/candidate/overview', [JobApplicationController::class, 'candidateOverview'])->name('candidate.overview');
             Route::get('/candidate/job-applications', [JobApplicationController::class, 'candidateApplications'])->name('candidate.job.application');
             Route::delete('/job-application/{application}', [JobApplicationController::class, 'delete'])->name('job.application.delete')->can('delete', 'application');
         });

@@ -5,7 +5,7 @@
     <!-- job post company Start -->
     <div class="job-post-company pt-120 pb-120">
         <div class="container">
-            <div class="row justify-content-between">
+            <div id="wrapper" class="row justify-content-between">
                 <!-- Left Content -->
                 <div class="col-xl-7 col-lg-8">
                     <!-- job single -->
@@ -53,7 +53,7 @@
 
                         @if (auth()->user() and auth()->user()->role === 'Candidate')
                         <div class="apply-btn2">
-                            <a href="#" class="btn">Apply Now</a>
+                            <button class="btn" onclick="apply()">Apply Now</button>
                         </div>
                         @endif
 
@@ -85,7 +85,6 @@
 
         getJob()
 
-
         async function getJob() {
             // Get the current URL
             const currentUrl = window.location.href;
@@ -104,6 +103,10 @@
             if (response.data['status'] === 'success') {
                 let job = response.data['data']
                 let company = response.data['data']['company']
+
+                if (job['status'] !== 'AVAILABLE') {
+                    document.getElementById('wrapper').innerHTML = "<h2>This job is unavailable!</h2>"
+                }
 
                 const posted = new Date(job['created_at']);
                 const deadline = new Date(job['deadline']);
@@ -135,6 +138,22 @@
                 companyLinks.forEach(link => {
                     link.href = `{{ url('/company') }}/${company['id']}`
                 });
+            }
+        }
+
+        async function apply() {
+            const currentUrl = window.location.href;
+            const urlParts = currentUrl.split('/');
+            const jobId = urlParts[urlParts.length - 1];
+
+            showLoader();
+            let res = await axios.get(`{{ url('/api/job-application') }}/${jobId}`)
+            hideLoader();
+
+            if (res.data['status'] === 'success') {
+                alert(res.data['message'])
+            } else {
+                alert(res.data['message'])
             }
         }
 

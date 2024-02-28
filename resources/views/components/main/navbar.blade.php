@@ -20,6 +20,10 @@
                                         @auth
                                             @if (auth()->user()->role === 'Candidate')
                                             <li><a href="{{ route('candidate.dashboard.view') }}">Dashboard</a></li>
+                                            @elseif (auth()->user()->isSuperUser)
+                                            <li><a href="{{ route('candidate.dashboard.view') }}">Dashboard</a></li>
+                                            @else
+                                            <li><a href="{{ route('company.dashboard.view') }}">Dashboard</a></li>
                                             @endif
                                         @endauth
                                         <li><a href="{{ route('jobs.view') }}">Job Listing</a></li>

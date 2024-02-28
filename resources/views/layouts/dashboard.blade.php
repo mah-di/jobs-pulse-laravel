@@ -88,6 +88,7 @@
 
     <script>
 
+        @if (auth()->user()->role === 'Candidate')
         getCandidateProfile()
 
         async function getCandidateProfile() {
@@ -110,9 +111,35 @@
             }
         }
 
-    </script>
+        @elseif (in_array(auth()->user()->role, ['Admin', 'Manager', 'Editor']))
+        getCompanyProfile()
 
-    @stack('script')
+        async function getCompanyProfile() {
+
+            showLoader()
+            let res = await axios.get("{{ route('profile.show') }}")
+            hideLoader()
+
+            if (res.data['status'] === 'success') {
+                let data = res.data['data']['profile']
+
+                let names = document.querySelectorAll('.name')
+                let profileImgs = document.querySelectorAll('.profileImg')
+
+                names.forEach(name => name.innerText = `${data['firstName']} ${data['lastName']}`)
+                profileImgs.forEach(profileImg => profileImg.src = "{{ url('') }}" + '/' + data['profileImg'])
+
+                document.querySelector('#role').innerText = localStorage.getItem('role')
+            } else {
+                alert(res.data['message'])
+            }
+        }
+
+        @endif
+
+        </script>
+
+@stack('script')
 
 </body>
 

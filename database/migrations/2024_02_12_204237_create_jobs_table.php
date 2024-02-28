@@ -30,7 +30,7 @@ return new class extends Migration
             $table->unsignedInteger('salary');
             $table->enum('status', ['PENDING', 'AVAILABLE', 'UNAVAILABLE', 'RESTRICTED']);
             $table->enum('type', ['On-Site', 'Remote', 'Hybrid']);
-            $table->timestamp('deadline');
+            $table->date('deadline');
             $table->text('restrictionFeedback');
 
             $table->timestamp('created_at')->useCurrent();

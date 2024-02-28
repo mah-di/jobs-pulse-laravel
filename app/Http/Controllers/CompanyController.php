@@ -102,6 +102,27 @@ class CompanyController extends Controller
         }
     }
 
+    public function companyOverview(Request $request)
+    {
+        try {
+            $posted = $request->user()->company->jobs()->count();
+            $pending = $request->user()->company->jobs()->where('status', 'PENDING')->count();
+            $restricted = $request->user()->company->jobs()->where('status', 'RESTRICTED')->count();
+            $unavailable = $request->user()->company->jobs()->where('status', 'UNAVAILABLE')->count();
+            $available = $request->user()->company->jobsPosted;
+            $employees = $request->user()->company->employees()->count();
+
+            return ResponseHelper::make(
+                'success',
+                compact(['posted', 'pending', 'available', 'unavailable', 'restricted', 'employees'])
+            );
+
+        } catch (Exception $exception) {
+            return ResponseHelper::make('fail', null, $exception->getMessage());
+        }
+
+    }
+
     public function updateActivity(Request $request, Company $company)
     {
         try {
