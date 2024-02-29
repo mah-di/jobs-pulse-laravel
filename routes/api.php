@@ -123,6 +123,8 @@ Route::middleware('auth.jwt')->group(function () {
         Route::get('/job/{job}/applications', [JobApplicationController::class, 'receivedApplications'])->name('job.application.received')->can('viewApplications', 'job');
         Route::post('/job-application/{application}/update-status', [JobApplicationController::class, 'updateStatus'])->name('job.application.update')->can('update', 'application');
 
+        Route::get('/candidate/{id}/profile', [CandidateProfileController::class, 'get'])->name('candidate.profile.get')->can('takeManagerialDecision', Company::class);
+
         Route::get('/company/activity/check', [CompanyController::class, 'isActive'])->name('company.check');
 
         Route::get('/company-plugin/get', [CompanyPluginController::class, 'indexByCompany'])->name('company-plugin.index.get');

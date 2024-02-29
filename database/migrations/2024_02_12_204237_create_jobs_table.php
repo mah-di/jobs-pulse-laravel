@@ -31,7 +31,7 @@ return new class extends Migration
             $table->enum('status', ['PENDING', 'AVAILABLE', 'UNAVAILABLE', 'RESTRICTED']);
             $table->enum('type', ['On-Site', 'Remote', 'Hybrid']);
             $table->date('deadline');
-            $table->text('restrictionFeedback');
+            $table->text('restrictionFeedback')->nullable();
 
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();

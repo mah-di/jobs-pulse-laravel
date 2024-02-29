@@ -111,8 +111,21 @@
             }
         }
 
-        @elseif (in_array(auth()->user()->role, ['Admin', 'Manager', 'Editor']))
+        @elseif (auth()->user()->company_id !== null)
+        checkBlogs()
         getCompanyProfile()
+
+        async function checkBlogs() {
+            showLoader()
+            let res = await axios.get("{{ url('/api/company-plugin') }}/2/check")
+            hideLoader()
+
+            let blogNav = res.data['data'] === 0 ? document.getElementById('company-has-blog') : null
+
+            if (blogNav) {
+                blogNav.remove()
+            }
+        }
 
         async function getCompanyProfile() {
 
@@ -134,7 +147,6 @@
                 alert(res.data['message'])
             }
         }
-
         @endif
 
         </script>

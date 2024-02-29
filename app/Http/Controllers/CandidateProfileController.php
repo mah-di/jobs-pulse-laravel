@@ -27,6 +27,21 @@ class CandidateProfileController extends Controller
         }
     }
 
+    public function get(string $id)
+    {
+        try {
+            $profile = CandidateProfile::with('user')->find($id);
+
+            return ResponseHelper::make(
+                'success',
+                $profile,
+            );
+
+        } catch (Exception $exception) {
+            return ResponseHelper::make('fail', null, $exception->getMessage());
+        }
+    }
+
     public function save(Request $request)
     {
         try {

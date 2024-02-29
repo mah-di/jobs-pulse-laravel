@@ -79,54 +79,81 @@
         </div>
     </div>
 
-    <div class="modal animated zoomIn" id="update-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal animated zoomIn" id="detail-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Update Job</h5>
+                        <h3 class="modal-title" id="exampleModalLabel">Applicant Detail</h3>
+                        <h5>Application #<span id="applicationId"></span></h5>
                     </div>
                     <div class="modal-body">
                         <div class="container">
                             <div class="bg-light g-4">
                                 <div class="p-3">
-                                    <input type="hidden" class="d-none" id="updateID">
-                                    <div class="form-floating mb-3">
-                                        <select class="form-select mb-3" aria-label="Default select example" id="updateCat">
-                                            <option>Job Category *</option>
-                                        </select>
+
+                                    <div class="container-fluid pt-4 px-4">
+                                        <div class="bg-light g-4">
+                                            <div class="m-3 pt-3">
+                                                <h3>Personal Information</h3>
+                                                <hr>
+                                                <div class="row">
+                                                    <div class="col-md-6 mb-4">
+                                                        <img id="profileImg" class="rounded-circle" height="200px" width="200px" src="{{ url(env('DEFAULT_PROFILE_IMG')) }}" alt="">
+                                                    </div>
+                                                    <div class="col-md-6"></div>
+                                                    <div class="col-md-6">
+                                                        <p>Name : <b id="name"></b></p>
+                                                        <p>Father's Name : <b id="fatherName"></b></p>
+                                                        <p>Mother's Name : <b id="motherName"></b></p>
+                                                        <p>Date of Birth : <b id="dob"></b></p>
+                                                        <p>email : <b id="email"></b></p>
+                                                        <p>Contact : <b id="contact"></b></p>
+                                                        <p id="ecWrapper" class="d-none">Emergency Contact : <b id="econtact"></b></p>
+                                                        <p>NID : <b id="nid"></b></p>
+                                                        <p id="psWrapper" class="d-none">Passport : <b id="passport"></b></p>
+                                                        <p>Blood Group : <b id="bloodGroup"></b></p>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <p>Address : <b id="address"></b></p>
+                                                        <p id="webWrapper" class="d-none">Personal Website : <b id="website"></b></p>
+                                                        <p id="waWrapper" class="d-none">Whatsapp : <b id="whatsapp"></b></p>
+                                                        <p id="lkWrapper" class="d-none">LinkedIn : <b id="linkedin"></b></p>
+                                                        <p id="drWrapper" class="d-none">Dribble : <b id="dribble"></b></p>
+                                                        <p id="beWrapper" class="d-none">Behance : <b id="behance"></b></p>
+                                                        <p id="ghWrapper" class="d-none">GitHub : <b id="github"></b></p>
+                                                        <p id="slWrapper" class="d-none">Slack : <b id="slack"></b></p>
+                                                        <p id="twWrapper" class="d-none">Twitter : <b id="twitter"></b></p>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <h3>Educational Information</h3>
+                                                <table class="table">
+                                                    <thead>
+                                                        <th>Degree</th>
+                                                        <th>Institution</th>
+                                                        <th>Group/Department</th>
+                                                        <th>GPA/CGPA</th>
+                                                        <th>Passing Year</th>
+                                                        <th>Certificate</th>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr id="SSC"></tr>
+                                                        <tr id="HSC"></tr>
+                                                        <tr id="Bachelor/Honors"></tr>
+                                                    </tbody>
+                                                </table>
+                                                <hr>
+                                                <h3>Professional Training</h3>
+                                                <div id="training-wrapper"></div>
+                                                <hr>
+                                                <h3>Job Experience</h3>
+                                                <div id="job-experience-wrapper"></div>
+                                                <hr>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="updateTitle" placeholder="name@example.com">
-                                        <label for="floatingInput">Title *</label>
-                                    </div>
-                                    <div class="form-floating mb-3">
-                                        <textarea class="form-control" placeholder="Details about the job" id="updateDescription" style="height: 150px;"></textarea>
-                                        <label for="floatingInput">Description *</label>
-                                    </div>
-                                    <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="updateSkills" placeholder="name@example.com">
-                                        <label for="floatingInput">Skills (Use Commas to differentiate multiple skills) *</label>
-                                    </div>
-                                    <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="updateSalary" placeholder="name@example.com">
-                                        <label for="floatingInput">Salary *</label>
-                                    </div>
-                                    <div class="form-floating mb-3">
-                                        <select class="form-select mb-3" aria-label="Default select example" id="updateType">
-                                            <option>Job Type *</option>
-                                            <option value="On-Site">On-Site</option>
-                                            <option value="Remote">Remote</option>
-                                            <option value="Hybrid">Hybrid</option>
-                                        </select>
-                                        <label for="floatingInput">Job Type *</label>
-                                    </div>
-                                    <div class="form-floating mb-3">
-                                        <input type="date" class="form-control" id="updateDeadline" placeholder="name@example.com">
-                                        <label for="floatingInput">Deadline *</label>
-                                    </div>
-                                    <div class="d-flex">
-                                        <button class="btn btn-primary w-50" onclick="update()">Save</button>
-                                        <button id="updateClose" class="btn btn-danger w-50" data-bs-dismiss="modal" aria-label="Close">Close</button>
+                                    <div class="d-flex justify-content-end">
+                                        <button id="detailClose" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close">Close</button>
                                     </div>
                                 </div>
                             </div>
@@ -192,7 +219,7 @@
                                 <img class="rounded-circle" src="{{ url('') }}/${item['candidate']['profileImg']}" height="35px" width="35px">&nbsp;&nbsp;
                                 <span>${item['candidate']['firstName']} ${item['candidate']['lastName']}</span>
                             </td>
-                            <td><button class="btn btn-sm btn-primary viewDetail" data-id="${item['candidate']['id']}"><i class="fas fa-eye"></i></button></td>
+                            <td><button class="btn btn-sm btn-primary viewDetail" data-application-id="${item['id']}" data-id="${item['candidate']['id']}"><i class="fas fa-eye"></i></button></td>
                             <td><span class="badge bg-secondary">${item['status']}</span></td>
                             <td>` +
                                 (item['status'] === 'REJECTED' ? `<button class="btn btn-sm btn-success accept" data-job-id="${id}" data-id="${item['id']}">Accept</button>` : '') +
@@ -203,6 +230,19 @@
 
                     document.getElementById('applicationList').innerHTML += content
                 });
+
+                $('.viewDetail').click(async function () {
+                    let id = $(this).data('id')
+                    let applicationId = $(this).data('application-id')
+
+                    await getProfile(id)
+                    await getEducation(id)
+                    await getTraining(id)
+                    await getExperience(id)
+
+                    document.getElementById('applicationId').innerText = applicationId
+                    $('#detail-modal').modal('show')
+                })
 
                 $('.accept').click(async function () {
                     let id = $(this).data('id')
@@ -240,6 +280,207 @@
 
             } else {
                 alert(res.data['message'])
+            }
+        }
+
+        async function getProfile(id) {
+            showLoader()
+            let res = await axios.get(`{{ url('/api/candidate') }}/${id}/profile`)
+            hideLoader()
+
+            if (res.data['status'] === 'success') {
+                let data = res.data['data']
+
+                document.getElementById('profileImg').src = "{{ url('') }}" + '/' + data['profileImg']
+                document.getElementById('name').innerText = `${data['firstName']} ${data['lastName']}`
+                document.getElementById('fatherName').innerText = data['fatherName']
+                document.getElementById('motherName').innerText = data['motherName']
+                document.getElementById('dob').innerText = data['dob']
+                document.getElementById('email').innerText = data['user']['email']
+                document.getElementById('contact').innerText = data['contact']
+                document.getElementById('nid').innerText = data['nid']
+                document.getElementById('bloodGroup').innerText = data['bloodGroup']
+                document.getElementById('address').innerText = data['address']
+
+                if (data['emergencyContact']) {
+                    document.getElementById('econtact').innerText = data['emergencyContact']
+                    $('#ecWrapper').removeClass('d-none')
+                } else {
+                    document.getElementById('econtact').innerText = ''
+                    $('#ecWrapper').addClass('d-none')
+                }
+                if (data['passport']) {
+                    document.getElementById('passport').innerText = data['passport']
+                    $('#psWrapper').removeClass('d-none')
+                } else {
+                    document.getElementById('passport').innerText = ''
+                    $('#psWrapper').addClass('d-none')
+                }
+                if (data['personalWebsite']) {
+                    document.getElementById('website').innerText = data['personalWebsite']
+                    $('#webWrapper').removeClass('d-none')
+                } else {
+                    document.getElementById('website').innerText = ''
+                    $('#webWrapper').addClass('d-none')
+                }
+                if (data['whatsapp']) {
+                    document.getElementById('whatsapp').innerText = data['whatsapp']
+                    $('#waWrapper').removeClass('d-none')
+                } else {
+                    document.getElementById('whatsapp').innerText = ''
+                    $('#waWrapper').addClass('d-none')
+                }
+                if (data['linkedin']) {
+                    document.getElementById('linkedin').innerText = data['linkedin']
+                    $('#lkWrapper').removeClass('d-none')
+                } else {
+                    document.getElementById('linkedin').innerText = ''
+                    $('#lkWrapper').addClass('d-none')
+                }
+                if (data['dribble']) {
+                    document.getElementById('dribble').innerText = data['dribble']
+                    $('#drWrapper').removeClass('d-none')
+                } else {
+                    document.getElementById('dribble').innerText = ''
+                    $('#drWrapper').addClass('d-none')
+                }
+                if (data['behance']) {
+                    document.getElementById('behance').innerText = data['behance']
+                    $('#beWrapper').removeClass('d-none')
+                } else {
+                    document.getElementById('behance').innerText = ''
+                    $('#beWrapper').addClass('d-none')
+                }
+                if (data['github']) {
+                    document.getElementById('github').innerText = data['github']
+                    $('#ghWrapper').removeClass('d-none')
+                } else {
+                    document.getElementById('github').innerText = ''
+                    $('#ghWrapper').addClass('d-none')
+                }
+                if (data['slack']) {
+                    document.getElementById('slack').innerText = data['slack']
+                    $('#slWrapper').removeClass('d-none')
+                } else {
+                    document.getElementById('slack').innerText = ''
+                    $('#slWrapper').addClass('d-none')
+                }
+                if (data['twitter']) {
+                    document.getElementById('twitter').innerText = data['twitter']
+                    $('#twWrapper').removeClass('d-none')
+                } else {
+                    document.getElementById('twitter').innerText = ''
+                    $('#twWrapper').addClass('d-none')
+                }
+            }
+        }
+
+        async function getEducation(id) {
+            showLoader()
+            let res = await axios.get(`{{ url('/api/candidate/education') }}/${id}`)
+            hideLoader()
+
+            document.getElementById('SSC').innerHTML = ''
+            document.getElementById('HSC').innerHTML = ''
+            document.getElementById('Bachelor/Honors').innerHTML = ''
+
+            if (res.data['status'] === 'success') {
+                let data = res.data['data']
+
+                data.forEach(item => {
+                    content = `
+                        <td>${item['degreeType']}</td>
+                        <td>${item['institution']}</td>
+                        <td>${item['department']}</td>
+                        <td>${item['cgpa']}</td>
+                        <td>${item['passingYear']}</td>
+                        <td><a href="{{ url('') }}/${item['certificate']}" target="_blank">Certificate</a></td>
+                    `
+
+                    document.getElementById(item['degreeType']).innerHTML = content
+                });
+            }
+        }
+
+        async function getTraining(id) {
+            showLoader()
+            let res = await axios.get(`{{ url('/api/candidate/job-experience') }}/${id}`)
+            hideLoader()
+
+            document.getElementById('job-experience-wrapper').innerHTML = 'content'
+
+            if (res.data['status'] === 'success') {
+                let data = res.data['data']
+
+                data.forEach(element => {
+                    content = `
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-floating mb-3">
+                                        <p>Company : <b>${element['company']}</b></p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-floating mb-3">
+                                        <p>Designation : <b>${element['designation']}</b></p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-floating mb-3">
+                                        <p>Service Time : <b>${element['joiningDate']} to ${element['quittingDate']}</b></p>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="mb-3 d-flex align-items-center justify-content-between">` +
+                                        (element['isCurrentJob'] ? `✅ Current Job` : '')
+                                    + `</div>
+                                </div>
+                            </div>
+                    `
+
+                    document.getElementById('job-experience-wrapper').innerHTML += content
+                });
+            }
+        }
+
+        async function getExperience(id) {
+            showLoader()
+            let res = await axios.get(`{{ url('/api/candidate/training') }}/${id}`)
+            hideLoader()
+
+            document.getElementById('training-wrapper').innerHTML = ''
+
+            if (res.data['status'] === 'success') {
+                let data = res.data['data']
+
+                data.forEach(element => {
+                    content = `
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-floating mb-3">
+                                        <p>Institution Name : <b>${element['institution']}</b></p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-floating mb-3">
+                                        <p>Title : <b>${element['title']}</b></p>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-floating mb-3">
+                                        <p>Completion Year : <b>${element['completionYear']}</b></p>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="mb-3 d-flex align-items-center justify-content-between">` +
+                                        (element['certificate'] ? `<a href="{{ url('') }}/${element['certificate']}" target="_blank">Certificate</a>` : '')
+                                    + `</div>
+                                </div>
+                            </div>
+                    `
+
+                    document.getElementById('training-wrapper').innerHTML += content
+                });
             }
         }
 
