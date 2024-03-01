@@ -12,6 +12,7 @@ use App\Http\Controllers\JobApplicationController;
 use App\Http\Controllers\JobCategoryController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\JobExperienceController;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\PluginController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
@@ -46,6 +47,8 @@ Route::post('/candidate/login', [UserController::class, 'loginCandidate'])->name
 Route::post('/request-password-reset', [UserController::class, 'sendPasswordResetOTP'])->name('send.password.reset.otp');
 Route::post('/verify-reset-otp', [UserController::class, 'verifyPasswordResetOTP'])->name('verify.password.reset.otp');
 
+Route::get('/page/{type}', [PageController::class, 'show'])->name('page.show');
+
 Route::get('/top-companies', [CompanyController::class, 'topCompanies'])->name('company.top');
 Route::get('/company/{id}', [CompanyController::class, 'show'])->name('company.show');
 
@@ -59,7 +62,7 @@ Route::get('/job/company/{companyId}', [JobController::class, 'jobsByCompany'])-
 
 Route::get('/job/{id}/applications/count', [JobApplicationController::class, 'receivedApplicationCount'])->name('job.application.count');
 
-Route::get('/blog-category/{companyId}/company', [BlogCategoryController::class, 'index'])->name('blog.category.index');
+Route::get('/blog-category', [BlogCategoryController::class, 'index'])->name('blog.category.index');
 Route::get('/blog-category/{id}', [BlogCategoryController::class, 'show'])->name('blog.category.show');
 
 Route::get('/blog/index/{companyId}', [BlogController::class, 'index'])->name('blog.index.by.company');
@@ -85,11 +88,13 @@ Route::middleware('auth.jwt')->group(function () {
     Route::get('/department', [DepartmentController::class, 'index'])->name('department.index');
 
     Route::middleware('superUser.check')->group(function () {
+        Route::get('/jobs-pulse/admin/overview', [CompanyController::class, 'adminOverview'])->name('admin.overview');
+        Route::get('/jobs-pulse/admin/company/{status}', [CompanyController::class, 'index'])->name('company.index')->can('takeImportantDecision', Company::class);
         Route::post('/company/approve', [CompanyController::class, 'approve'])->name('company.approve')->can('takeImportantDecision', Company::class);
         Route::post('/company/restrict', [CompanyController::class, 'restrict'])->name('company.restrict')->can('takeImportantDecision', Company::class);
 
         Route::post('/department', [DepartmentController::class, 'save'])->name('department.save');
-        Route::delete('/department/{id}', [DepartmentController::class, 'delete'])->name('department.delete')->can('takeImportantDecision', Company::class);
+        Route::delete('/department/{name}', [DepartmentController::class, 'delete'])->name('department.delete')->can('takeImportantDecision', Company::class);
 
         Route::post('/plugin', [PluginController::class, 'update'])->name('plugin.update')->can('takeVeryImportantDecision', Company::class);
 
@@ -97,17 +102,23 @@ Route::middleware('auth.jwt')->group(function () {
         Route::post('/job-category/{id}', [JobCategoryController::class, 'update'])->name('job.category.update');
         Route::delete('/job-category/{id}', [JobCategoryController::class, 'delete'])->name('job.category.delete')->can('takeImportantDecision', Company::class);
 
+        Route::post('/blog-category', [BlogCategoryController::class, 'save'])->name('blog.category.save');
+        Route::delete('/blog-category/{category}', [BlogCategoryController::class, 'delete'])->name('blog.category.delete')->can('takeImportantDecision', Company::class);
+
         Route::post('/approve-job', [JobController::class, 'approve'])->name('job.approve')->can('takeImportantDecision', Company::class);
         Route::post('/restrict-job', [JobController::class, 'restrict'])->name('job.restrict')->can('takeImportantDecision', Company::class);
         Route::get('/jobs-pulse/admin/job/{status}', [JobController::class, 'getJobsByStatus'])->name('job.by.status');
-        Route::get('/jobs-pulse/admin/count/job', [JobController::class, 'getJobsCount'])->name('job.count');
 
-        Route::get('/employee', [EmployeeController::class, 'index'])->name('employee.index')->can('takeVeryImportantDecision', Company::class);
+        Route::get('/jobs-pulse/admin/employee', [EmployeeController::class, 'index'])->name('employee.index')->can('takeVeryImportantDecision', Company::class);
+        Route::get('/jobs-pulse/admin/employees', [EmployeeController::class, 'getSiteEmployees'])->name('site.employee');
 
         Route::get('/company-plugin', [CompanyPluginController::class, 'index'])->name('company-plugin.index')->can('takeImportantDecision', Company::class);
         Route::post('/company-plugin/approve', [CompanyPluginController::class, 'approve'])->name('company-plugin.approve')->can('takeImportantDecision', Company::class);
         Route::post('/company-plugin/reject', [CompanyPluginController::class, 'reject'])->name('company-plugin.reject')->can('takeImportantDecision', Company::class);
         Route::delete('/company-plugin/{id}', [CompanyPluginController::class, 'delete'])->name('company-plugin.delete')->can('takeVeryImportantDecision', Company::class);
+
+        Route::post('/page/about', [PageController::class, 'saveAbout'])->name('page.about.save');
+        Route::post('/page/contact', [PageController::class, 'saveContact'])->name('page.contact.save');
     });
 
     Route::middleware('companyUser.check')->group(function () {
@@ -123,6 +134,8 @@ Route::middleware('auth.jwt')->group(function () {
         Route::get('/job/{job}/applications', [JobApplicationController::class, 'receivedApplications'])->name('job.application.received')->can('viewApplications', 'job');
         Route::post('/job-application/{application}/update-status', [JobApplicationController::class, 'updateStatus'])->name('job.application.update')->can('update', 'application');
 
+        Route::get('/company-employee', [EmployeeController::class, 'indexByCompany'])->name('employee.index.by.company');
+
         Route::get('/candidate/{id}/profile', [CandidateProfileController::class, 'get'])->name('candidate.profile.get')->can('takeManagerialDecision', Company::class);
 
         Route::get('/company/activity/check', [CompanyController::class, 'isActive'])->name('company.check');
@@ -137,15 +150,11 @@ Route::middleware('auth.jwt')->group(function () {
         Route::get('/user/profile', [ProfileController::class, 'show'])->name('profile.show');
         Route::post('/user/profile', [ProfileController::class, 'update'])->name('profile.update');
 
-        Route::get('/company-employee', [EmployeeController::class, 'indexByCompany'])->name('employee.index.by.company');
         Route::post('/employee', [EmployeeController::class, 'create'])->name('employee.create')->can('createEmployees', Company::class);
         Route::post('/employee/{user}', [EmployeeController::class, 'assignRole'])->name('employee.assign.role')->can('updateOrDeleteEmployees', [Company::class, 'user']);
         Route::delete('/employee/{user}', [EmployeeController::class, 'delete'])->name('employee.delete')->can('updateOrDeleteEmployees', [Company::class, 'user']);
 
         Route::get('/role', RoleController::class)->name('role.index');
-
-        Route::post('/blog-category', [BlogCategoryController::class, 'save'])->name('blog.category.save');
-        Route::delete('/blog-category/{category}', [BlogCategoryController::class, 'delete'])->name('blog.category.delete')->can('delete', 'category');
 
         Route::post('/blog/create/{category}', [BlogController::class, 'create'])->name('blog.create')->can('create', [Blog::class, 'category']);
         Route::post('/blog/{blog}', [BlogController::class, 'update'])->name('blog.update')->can('update', 'blog');

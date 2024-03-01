@@ -103,8 +103,8 @@ class CompanyPluginController extends Controller
 
             return ResponseHelper::make(
                 'success',
-                null,
-                $data
+                $data,
+                'Plugin approved!'
             );
 
         } catch (Exception $exception) {
@@ -127,8 +127,8 @@ class CompanyPluginController extends Controller
 
             return ResponseHelper::make(
                 'success',
-                null,
-                $data
+                $data,
+                'Plugin Rejected!'
             );
 
         } catch (Exception $exception) {

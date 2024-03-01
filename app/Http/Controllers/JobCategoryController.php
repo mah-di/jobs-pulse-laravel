@@ -41,8 +41,8 @@ class JobCategoryController extends Controller
 
             return ResponseHelper::make(
                 'success',
-                null,
-                $data
+                $data,
+                'Job category updated!'
             );
 
         } catch (Exception $exception) {
@@ -84,8 +84,8 @@ class JobCategoryController extends Controller
 
             return ResponseHelper::make(
                 'success',
-                null,
-                $data
+                $data,
+                'Job category deleted!'
             );
 
         } catch (Exception $exception) {

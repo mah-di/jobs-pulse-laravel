@@ -6,7 +6,7 @@
         <div class="bg-light rounded h-100 p-4">
             <div class="d-flex justify-content-between">
                 <h5 class="mb-4">Employees</h5>
-                @if (auth()->user()->role === 'Admin')
+                @if (auth()->user()->role === 'Site Admin')
                 <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#create-modal">Create Employee</button>
                 @endif
             </div>
@@ -15,11 +15,11 @@
                     <thead>
                         <th>Name</th>
                         <th>Email</th>
-                        @if (auth()->user()->role !== 'Editor')
+                        @if (auth()->user()->role !== 'Site Editor')
                         <th>Verified</th>
                         @endif
                         <th>Role</th>
-                        @if (auth()->user()->role === 'Admin')
+                        @if (auth()->user()->role === 'Site Admin')
                         <th>Action</th>
                         @endif
                     </thead>
@@ -29,7 +29,7 @@
         </div>
     </div>
 
-    @if (auth()->user()->role === 'Admin')
+    @if (auth()->user()->role === 'Site Admin')
     <div class="modal animated zoomIn" id="create-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
                 <div class="modal-content">
@@ -56,9 +56,9 @@
                                         <div class="form-floating mb-3 col-md-3">
                                             <select class="form-select mb-3" id="employeeRole">
                                                 <option>Select a Role</option>
-                                                <option value="Admin">Admin</option>
-                                                <option value="Manager">Manager</option>
-                                                <option value="Editor">Editor</option>
+                                                <option value="Site Admin">Site Admin</option>
+                                                <option value="Site Manager">Site Manager</option>
+                                                <option value="Site Editor">Site Editor</option>
                                             </select>
                                             <label for="floatingInput">Role *</label>
                                         </div>
@@ -94,18 +94,18 @@
 
         async function getEmployees() {
             showLoader()
-            let res = await axios.get(`{{ route('employee.index.by.company') }}`)
+            let res = await axios.get(`{{ route('site.employee') }}`)
             hideLoader()
 
             document.getElementById('employee-wrapper').innerHTML = ''
 
             if (res.data['status'] === 'success') {
-                let canAct = (localStorage.getItem('role') === 'Admin')
+                let canAct = (localStorage.getItem('role') === 'Site Admin')
                 let data = res.data['data']
 
                 data.forEach(element => {
-                    let action = (canAct && element['role'] !== 'Admin') ? `<td><button class="btn btn-sm btn-danger delete" data-id="${element['id']}">Delete</button></td>` : ''
-                    let verified = (localStorage.getItem('role') !== 'Editor') ? `<td>` + (element['emailVerifiedAt'] ? '✅' : '❌') + `</td>` : ''
+                    let action = (canAct && element['role'] !== 'Site Admin') ? `<td><button class="btn btn-sm btn-danger delete" data-id="${element['id']}">Delete</button></td>` : ''
+                    let verified = (localStorage.getItem('role') !== 'Site Editor') ? `<td>` + (element['emailVerifiedAt'] ? '✅' : '❌') + `</td>` : ''
 
                     let content = `<tr class="p-3">
                             <td>
@@ -115,11 +115,11 @@
                             <td>${element['email']}</td>
                             ${verified}
                             <td>` +
-                                ((canAct && element['role'] !== 'Admin')
+                                ((canAct && element['role'] !== 'Site Admin')
                                     ? `<select class="form-control assignRole" data-id="${element['id']}">
-                                            <option value="Admin">Admin</option>
-                                            <option value="Manager" ` + (element['role'] === 'Manager' ? 'selected' : '') + `>Manager</option>
-                                            <option value="Editor" ` + (element['role'] === 'Editor' ? 'selected' : '') + `>Editor</option>
+                                            <option value="Site Admin">Site Admin</option>
+                                            <option value="Site Manager" ` + (element['role'] === 'Site Manager' ? 'selected' : '') + `>Site Manager</option>
+                                            <option value="Site Editor" ` + (element['role'] === 'Site Editor' ? 'selected' : '') + `>Site Editor</option>
                                         </select>`
                                     : `${element['role']}`)
                             + `</td>
@@ -150,7 +150,7 @@
             }
         }
 
-        @if (auth()->user()->role === 'Admin')
+        @if (auth()->user()->role === 'Site Admin')
         async function deleteEmployee(id) {
             showLoader()
             let res = await axios.delete(`{{ url('/api/employee') }}/${id}`)

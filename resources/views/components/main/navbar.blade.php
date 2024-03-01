@@ -21,13 +21,13 @@
                                             @if (auth()->user()->role === 'Candidate')
                                             <li><a href="{{ route('candidate.dashboard.view') }}">Dashboard</a></li>
                                             @elseif (auth()->user()->isSuperUser)
-                                            <li><a href="{{ route('candidate.dashboard.view') }}">Dashboard</a></li>
+                                            <li><a href="{{ route('admin.dashboard.view') }}">Dashboard</a></li>
                                             @else
                                             <li><a href="{{ route('company.dashboard.view') }}">Dashboard</a></li>
                                             @endif
                                         @endauth
                                         <li><a href="{{ route('jobs.view') }}">Job Listing</a></li>
-                                        <li><a href="about.html">About</a></li>
+                                        <li><a href="{{ route('about.view') }}">About</a></li>
                                         <li><a href="#">Page</a>
                                             <ul class="submenu">
                                                 <li><a href="blog.html">Blog</a></li>
@@ -36,7 +36,7 @@
                                                 <li><a href="job_details.html">job Details</a></li>
                                             </ul>
                                         </li>
-                                        <li><a href="contact.html">Contact</a></li>
+                                        <li><a href="{{ route('contact.view') }}">Contact</a></li>
                                     </ul>
                                 </nav>
                             </div>

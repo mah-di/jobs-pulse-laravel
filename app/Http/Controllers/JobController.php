@@ -272,20 +272,4 @@ class JobController extends Controller
             return ResponseHelper::make('fail', null, $exception->getMessage());
         }
     }
-
-    public function getJobsCount()
-    {
-        try {
-            $data = Job::count();
-
-            return ResponseHelper::make(
-                'success',
-                null,
-                $data
-            );
-
-        } catch (Exception $exception) {
-            return ResponseHelper::make('fail', null, $exception->getMessage());
-        }
-    }
 }

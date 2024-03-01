@@ -47,15 +47,15 @@ class DepartmentController extends Controller
         }
     }
 
-    public function delete(string $id)
+    public function delete(string $name)
     {
         try {
-            $data = Department::where('id', $id)->delete();
+            $data = Department::where('name', $name)->delete();
 
             return ResponseHelper::make(
                 'success',
-                null,
-                $data
+                $data,
+                'Department deleted!'
             );
 
         } catch (Exception $exception) {

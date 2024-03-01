@@ -33,6 +33,26 @@ class EmployeeController extends Controller
         }
     }
 
+    public function getSiteEmployees(Request $request)
+    {
+        try {
+            $q = User::where('isSuperUser', true);
+
+            if ($request->query('role'))
+                $q = $q->where('role', $request->query('role'));
+
+            $data = $q->with('profile')->get();
+
+            return ResponseHelper::make(
+                'success',
+                $data
+            );
+
+        } catch (Exception $exception) {
+            return ResponseHelper::make('fail', null, $exception->getMessage());
+        }
+    }
+
     public function indexByCompany(Request $request)
     {
         try {

@@ -15,4 +15,8 @@ class Page extends Model
         'description',
         'coverImg',
     ];
+
+    protected $casts = [
+        'description' => 'array'
+    ];
 }

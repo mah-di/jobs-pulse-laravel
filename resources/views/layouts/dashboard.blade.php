@@ -111,23 +111,10 @@
             }
         }
 
-        @elseif (auth()->user()->company_id !== null)
-        checkBlogs()
-        getCompanyProfile()
+        @else
+        getProfile()
 
-        async function checkBlogs() {
-            showLoader()
-            let res = await axios.get("{{ url('/api/company-plugin') }}/2/check")
-            hideLoader()
-
-            let blogNav = res.data['data'] === 0 ? document.getElementById('company-has-blog') : null
-
-            if (blogNav) {
-                blogNav.remove()
-            }
-        }
-
-        async function getCompanyProfile() {
+        async function getProfile() {
 
             showLoader()
             let res = await axios.get("{{ route('profile.show') }}")
@@ -145,6 +132,22 @@
                 document.querySelector('#role').innerText = localStorage.getItem('role')
             } else {
                 alert(res.data['message'])
+            }
+        }
+        @endif
+
+        @if (auth()->user()->company_id !== null)
+        checkBlogs()
+
+        async function checkBlogs() {
+            showLoader()
+            let res = await axios.get("{{ url('/api/company-plugin') }}/2/check")
+            hideLoader()
+
+            let blogNav = res.data['data'] === 0 ? document.getElementById('company-has-blog') : null
+
+            if (blogNav) {
+                blogNav.remove()
             }
         }
         @endif

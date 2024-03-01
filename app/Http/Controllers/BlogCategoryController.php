@@ -9,10 +9,10 @@ use Illuminate\Http\Request;
 
 class BlogCategoryController extends Controller
 {
-    public function index(Request $request, string $companyId)
+    public function index(Request $request)
     {
         try {
-            $data = BlogCategory::where('company_id', $companyId)->get();
+            $data = BlogCategory::all();
 
             return ResponseHelper::make(
                 'success',
@@ -28,17 +28,14 @@ class BlogCategoryController extends Controller
     {
         try {
             $request->validate([
-                'id' => ['nullable'],
                 'name' => ['required'],
             ]);
 
             $data = BlogCategory::updateOrCreate(
                 [
-                    'id' => $request->id,
-                    'company_id' => $request->user()->company_id,
+                    'name' => $request->name,
                 ],
                 [
-                    'company_id' => $request->user()->company_id,
                     'name' => $request->name,
                 ]
             );

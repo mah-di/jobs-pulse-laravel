@@ -17,7 +17,7 @@
                 <span class="name d-none d-lg-inline-flex"></span>
             </a>
             <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                <a href="{{ auth()->user()->role === 'Candidate' ? route('candidate.profile.view') : route('profile.view') }}" class="dropdown-item">My Profile</a>
+                <a href="{{ auth()->user()->role === 'Candidate' ? route('candidate.profile.view') : (auth()->user()->isSuperUser ? route('admin.profile.view') : route('profile.view')) }}" class="dropdown-item">My Profile</a>
                 <a href="{{ route('logout') }}" class="dropdown-item">Log Out</a>
             </div>
         </div>

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Helpers\ImageHelper;
 use App\Helpers\ResponseHelper;
 use App\Models\Company;
+use App\Models\Job;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -16,6 +18,21 @@ class CompanyController extends Controller
     {
         try {
             $data = Company::select(['id', 'name', 'logo'])->orderByDesc('jobsPosted')->take(6)->get();
+
+            return ResponseHelper::make(
+                'success',
+                $data
+            );
+
+        } catch (Exception $exception) {
+            return ResponseHelper::make('fail', null, $exception->getMessage());
+        }
+    }
+
+    public function index(string $status)
+    {
+        try {
+            $data = Company::where('status', $status)->paginate(20);
 
             return ResponseHelper::make(
                 'success',
@@ -102,6 +119,28 @@ class CompanyController extends Controller
         }
     }
 
+    public function adminOverview()
+    {
+        try {
+            $pendingCompanies = Company::where('status', 'PENDING')->count();
+            $activeCompanies = Company::where('status', 'ACTIVE')->count();
+            $restrictedCompanies = Company::where('status', 'RESTRICTED')->count();
+            $pendingJobs = Job::where('status', 'PENDING')->count();
+            $availableJobs = Job::where('status', 'AVAILABLE')->count();
+            $siteAdmins = User::where('role', 'Site Admin')->count();
+            $siteManagers = User::where('role', 'Site Manager')->count();
+            $siteEditors = User::where('role', 'Site Editor')->count();
+
+            return ResponseHelper::make(
+                'success',
+                compact(['pendingCompanies', 'activeCompanies', 'restrictedCompanies', 'pendingJobs', 'availableJobs', 'siteAdmins', 'siteManagers', 'siteEditors'])
+            );
+
+        } catch (Exception $exception) {
+            return ResponseHelper::make('fail', null, $exception->getMessage());
+        }
+    }
+
     public function companyOverview(Request $request)
     {
         try {
@@ -120,7 +159,6 @@ class CompanyController extends Controller
         } catch (Exception $exception) {
             return ResponseHelper::make('fail', null, $exception->getMessage());
         }
-
     }
 
     public function updateActivity(Request $request, Company $company)

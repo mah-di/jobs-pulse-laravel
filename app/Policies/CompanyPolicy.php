@@ -57,7 +57,7 @@ class CompanyPolicy
 
     public function createEmployees(User $user)
     {
-        if (in_array($user->role,  ['Super Admin', 'Admin']))
+        if (in_array($user->role,  ['Site Admin', 'Admin']))
             return true;
 
         return false;
@@ -65,7 +65,7 @@ class CompanyPolicy
 
     public function updateOrDeleteEmployees(User $admin, User $user)
     {
-        if (in_array($admin->role,  ['Super Admin', 'Admin']) and !in_array($user->role, ['Super Admin', 'Admin']) and $admin->company_id === $user->company_id)
+        if (in_array($admin->role,  ['Site Admin', 'Admin']) and !in_array($user->role, ['Site Admin', 'Admin']) and $admin->company_id === $user->company_id)
             return true;
 
         return false;

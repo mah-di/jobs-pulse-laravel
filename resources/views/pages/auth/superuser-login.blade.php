@@ -11,7 +11,7 @@
                 <label for="password">Password</label>
                 <input id="password" type="password" placeholder="Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'" required="" class="single-input bg-white">
             </div>
-            <button onclick="login()" class="btn head-btn2 mt-4 w-100">Verify OTP</button>
+            <button onclick="login()" class="btn head-btn2 mt-4 w-100">Login</button>
         </div>
     </div>
 
@@ -46,7 +46,7 @@
                 localStorage.setItem('role', res.data['data']['role'])
                 localStorage.setItem('verified', res.data['data']['emailVerifiedAt'])
 
-                alert(res.data['message'])
+                window.location.href = "{{ route('admin.dashboard.view') }}"
             } else {
                 alert(res.data['message'])
             }
