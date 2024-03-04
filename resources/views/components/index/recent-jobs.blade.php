@@ -132,6 +132,9 @@
                             ${badgesHTML}
                         </div>
                     </div>
+                    <div>` +
+                        (canApply ? `<button onclick="saveJob('${element['id']}')" style="border:none;background-color: rgba(255, 255, 255, 0);padding:0;cursor:pointer" data-id="${element['id']}"><i class="far fa-1x fa-heart text-danger"></i></button>` : '')
+                    + `</div>
                     <div class="items-link f-right">
                         <a href="{{ route('jobs.view') }}?type=${element['type'].toLowerCase()}">${element['type']}</a>` +
                         (canApply ? `<a href="{{ url('/job') }}/${element['id']}">Apply</a>` : '')
@@ -148,6 +151,18 @@
             tabPane.innerHTML += `<div class="items-link">
                                     <a href="{{ route('jobs.view') }}?category=${tabId}">View More</a>
                                 </div>`
+        }
+    }
+
+    async function saveJob(id) {
+        showLoader()
+        let res = await axios.get(`{{ url('/api/job/save') }}/${id}`)
+        hideLoader()
+
+        if (res.data['status'] === 'success') {
+            alert(res.data['message'])
+        } else {
+            alert(res.data['message'])
         }
     }
 

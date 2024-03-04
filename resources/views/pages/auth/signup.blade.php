@@ -240,6 +240,8 @@
                 localStorage.setItem('email', res.data['data']['email'])
                 localStorage.setItem('role', res.data['data']['role'])
                 localStorage.setItem('verified', res.data['data']['emailVerifiedAt'])
+
+                window.location.href = "{{ route('verify.view') }}"
             } else {
                 alert(res.data['message'])
             }

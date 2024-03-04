@@ -17,13 +17,9 @@ class CompanyUserCheck
      */
     public function handle(Request $request, Closure $next): Response
     {
-        try {
-            if (!$request->user()->company_id)
-                throw new Exception();
-
-            return $next($request);
-        } catch (Exception $exception) {
+        if (!$request->user()->company_id)
             return ResponseHelper::make('unauthorized', null, null, [], 401);
-        }
+
+        return $next($request);
     }
 }

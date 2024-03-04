@@ -71,6 +71,8 @@ class Kernel extends HttpKernel
 
         'auth.jwt' => \App\Http\Middleware\TokenAuthenticate::class,
         'redirect.anon' => \App\Http\Middleware\RedirectAnonymousUser::class,
+        'guest.check' => \App\Http\Middleware\CheckGuest::class,
+        'redirect.auth' => \App\Http\Middleware\RedirectAuthenticatedUser::class,
         'superUser.check' => \App\Http\Middleware\SuperUserCheck::class,
         'companyUser.check' => \App\Http\Middleware\CompanyUserCheck::class,
         'candidate.check' => \App\Http\Middleware\CandidateCheck::class,

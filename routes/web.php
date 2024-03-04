@@ -17,11 +17,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn () => view('pages.index'))->name('home.view');
 
-Route::get('/signup', fn () => view('pages.auth.signup'))->name('signup.view');
-Route::get('/login', fn () => view('pages.auth.login'))->name('login.view');
-Route::get('/jobs-pulse/admin/login', fn () => view('pages.auth.superuser-login'))->name('superUser.login.view');
-Route::get('/send-otp', fn () => view('pages.auth.send-otp'))->name('send.otp.view');
-Route::get('/verify-otp', fn () => view('pages.auth.verify-reset-otp'))->name('verify.otp.view');
+Route::middleware('redirect.auth')->group(function () {
+    Route::get('/signup', fn () => view('pages.auth.signup'))->name('signup.view');
+    Route::get('/login', fn () => view('pages.auth.login'))->name('login.view');
+    Route::get('/jobs-pulse/admin/login', fn () => view('pages.auth.superuser-login'))->name('superUser.login.view');
+    Route::get('/send-otp', fn () => view('pages.auth.send-otp'))->name('send.otp.view');
+    Route::get('/verify-otp', fn () => view('pages.auth.verify-reset-otp'))->name('verify.otp.view');
+});
 
 Route::get('/about', fn () => view('pages.about'))->name('about.view');
 Route::get('/contact', fn () => view('pages.contact'))->name('contact.view');

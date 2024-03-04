@@ -8,7 +8,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class RestrictCandidate
+class CheckGuest
 {
     /**
      * Handle an incoming request.
@@ -17,9 +17,9 @@ class RestrictCandidate
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!$request->user()->role === 'Candidate')
-            return ResponseHelper::make('unauthorized', null, null, [], 401);
+        if (!$request->user())
+            return $next($request);
 
-        return $next($request);
+        return ResponseHelper::make('unauthorized', "Can't access while logged in!", 401);
     }
 }

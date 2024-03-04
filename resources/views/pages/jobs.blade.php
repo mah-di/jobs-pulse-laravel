@@ -254,10 +254,12 @@
                                 ${badgesHTML}
                             </div>
                         </div>
-                        <div class="items-link f-right">
-                            <a href="{{ route('jobs.view') }}?type=${element['type'].toLowerCase()}">${element['type']}</a>` +
+                        <div>` +
+                            (canApply ? `<button class="saveJob" style="border:none;background-color: rgba(255, 255, 255, 0);padding:0;cursor:pointer" data-id="${element['id']}"><i class="far fa-1x fa-heart text-danger"></i></button>` : '')
+                        + `</div>
+                        <div class="items-link f-right">` +
                             (canApply ? `<a href="{{ url('/job') }}/${element['id']}">Apply</a>` : '')
-                            + `<small>Posted: ${postDate}</small><br>
+                            + `<a href="{{ route('jobs.view') }}?type=${element['type'].toLowerCase()}">${element['type']}</a><small>Posted: ${postDate}</small><br>
                             <small>Deadline: ${deadlineDate}</small>
                         </div>
                     </div>
@@ -265,6 +267,20 @@
 
                 document.querySelector('#jobsPanel').innerHTML += card
             });
+
+            $('.saveJob').click(async function () {
+                let id = $(this).data('id')
+
+                showLoader()
+                let res = await axios.get(`{{ url('/api/job/save') }}/${id}`)
+                hideLoader()
+
+                if (res.data['status'] === 'success') {
+                    alert(res.data['message'])
+                } else {
+                    alert(res.data['message'])
+                }
+            })
 
             const skillElements = document.querySelectorAll('.skill');
 

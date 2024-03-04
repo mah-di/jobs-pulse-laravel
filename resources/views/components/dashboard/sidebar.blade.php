@@ -6,7 +6,7 @@
         <div class="d-flex align-items-center ms-4 mb-4">
             <div class="position-relative">
                 <a href="{{ auth()->user()->role === 'Candidate' ? route('candidate.profile.view') : (auth()->user()->isSuperUser ? route('admin.profile.view') : route('profile.view')) }}">
-                    <img class="rounded-circle profileImg" src="" alt="" style="width: 40px; height: 40px;">
+                    <img class="rounded-circle profileImg" src="{{ url('') . '/' . env('DEFAULT_PROFILE_IMG') }}" alt="" style="width: 40px; height: 40px;">
                     <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
                 </a>
             </div>
@@ -54,11 +54,12 @@
                         <a href="{{ route('admin.contact.view') }}" class="dropdown-item">Contact</a>
                     </div>
                 </div>
+
+                @if (auth()->user()->role !== 'Site Editor')
+                    <a href="{{ route('admin.plugin.view') }}" class="nav-item nav-link {{ request()->routeIs('admin.plugin.view') ? 'active' : '' }}"><i class="fa fa-briefcase me-2"></i>Plugins</a>
+                @endif
             @endif
 
-            @if (auth()->user()->role !== 'Site Editor')
-                <a href="{{ route('admin.plugin.view') }}" class="nav-item nav-link {{ request()->routeIs('admin.plugin.view') ? 'active' : '' }}"><i class="fa fa-briefcase me-2"></i>Plugins</a>
-            @endif
         </div>
     </nav>
 </div>

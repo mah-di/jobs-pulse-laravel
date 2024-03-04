@@ -17,13 +17,9 @@ class CandidateCheck
      */
     public function handle(Request $request, Closure $next): Response
     {
-        try {
-            if ($request->user()->role !== 'Candidate')
-                throw new Exception();
-
-            return $next($request);
-        } catch (Exception $exception) {
+        if ($request->user()->role !== 'Candidate')
             return ResponseHelper::make('unauthorized', null, null, [], 401);
-        }
+
+        return $next($request);
     }
 }

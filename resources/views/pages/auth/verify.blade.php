@@ -48,6 +48,8 @@
                 localStorage.setItem('role', res.data['data']['user']['role'])
                 localStorage.setItem('verified', res.data['data']['user']['emailVerifiedAt'])
                 localStorage.setItem('companyStatus', res.data['data']['companyStatus'])
+
+                window.location.href = "{{ route('login.view') }}"
             } else {
                 alert(res.data['message'])
             }

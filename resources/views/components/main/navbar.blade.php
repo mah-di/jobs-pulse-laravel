@@ -28,14 +28,6 @@
                                         @endauth
                                         <li><a href="{{ route('jobs.view') }}">Job Listing</a></li>
                                         <li><a href="{{ route('about.view') }}">About</a></li>
-                                        <li><a href="#">Page</a>
-                                            <ul class="submenu">
-                                                <li><a href="blog.html">Blog</a></li>
-                                                <li><a href="single-blog.html">Blog Details</a></li>
-                                                <li><a href="elements.html">Elements</a></li>
-                                                <li><a href="job_details.html">job Details</a></li>
-                                            </ul>
-                                        </li>
                                         <li><a href="{{ route('contact.view') }}">Contact</a></li>
                                     </ul>
                                 </nav>

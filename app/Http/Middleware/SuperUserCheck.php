@@ -17,13 +17,9 @@ class SuperUserCheck
      */
     public function handle(Request $request, Closure $next): Response
     {
-        try {
-            if (!$request->user()->isSuperUser)
-                throw new Exception();
-
-            return $next($request);
-        } catch (Exception $exception) {
+        if (!$request->user()->isSuperUser)
             return ResponseHelper::make('unauthorized', null, null, [], 401);
-        }
+
+        return $next($request);
     }
 }

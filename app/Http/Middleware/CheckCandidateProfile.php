@@ -17,17 +17,9 @@ class CheckCandidateProfile
      */
     public function handle(Request $request, Closure $next): Response
     {
-        try {
-            if (!$request->user()->candidateProfile()->exists())
-                throw new Exception("Please save your profile informaion first");
+        if (!$request->user()->candidateProfile()->exists())
+            return ResponseHelper::make('fail', null, "Please save your profile informaion first");
 
-            return $next($request);
-        } catch (Exception $exception) {
-            return ResponseHelper::make(
-                'fail',
-                null,
-                $exception->getMessage()
-            );
-        }
+        return $next($request);
     }
 }

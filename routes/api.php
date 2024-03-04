@@ -36,16 +36,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/jobs-pulse/admin/login', [UserController::class, 'loginSuperUser'])->name('superUser.login');
+Route::middleware('guest.check')->group(function () {
+    Route::post('/jobs-pulse/admin/login', [UserController::class, 'loginSuperUser'])->name('superUser.login');
 
-Route::post('/company/register', [UserController::class, 'registerCompany'])->name('company.register');
-Route::post('/company/login', [UserController::class, 'loginCompany'])->name('company.login');
+    Route::post('/company/register', [UserController::class, 'registerCompany'])->name('company.register');
+    Route::post('/company/login', [UserController::class, 'loginCompany'])->name('company.login');
 
-Route::post('/candidate/register', [UserController::class, 'registerCandidate'])->name('candidate.register');
-Route::post('/candidate/login', [UserController::class, 'loginCandidate'])->name('candidate.login');
+    Route::post('/candidate/register', [UserController::class, 'registerCandidate'])->name('candidate.register');
+    Route::post('/candidate/login', [UserController::class, 'loginCandidate'])->name('candidate.login');
 
-Route::post('/request-password-reset', [UserController::class, 'sendPasswordResetOTP'])->name('send.password.reset.otp');
-Route::post('/verify-reset-otp', [UserController::class, 'verifyPasswordResetOTP'])->name('verify.password.reset.otp');
+    Route::post('/request-password-reset', [UserController::class, 'sendPasswordResetOTP'])->name('send.password.reset.otp');
+    Route::post('/verify-reset-otp', [UserController::class, 'verifyPasswordResetOTP'])->name('verify.password.reset.otp');
+});
 
 Route::get('/page/{type}', [PageController::class, 'show'])->name('page.show');
 

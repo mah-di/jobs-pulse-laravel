@@ -13,7 +13,7 @@
     <div class="navbar-nav align-items-center ms-auto">
         <div class="nav-item dropdown">
             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                <img class="rounded-circle me-lg-2 profileImg" src="" alt="" style="width: 40px; height: 40px;">
+                <img class="rounded-circle me-lg-2 profileImg" src="{{ url('') . '/' . env('DEFAULT_PROFILE_IMG') }}" alt="" style="width: 40px; height: 40px;">
                 <span class="name d-none d-lg-inline-flex"></span>
             </a>
             <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
