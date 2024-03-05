@@ -78,5 +78,6 @@ class Kernel extends HttpKernel
         'candidate.check' => \App\Http\Middleware\CandidateCheck::class,
         'restrict.candidate' => \App\Http\Middleware\RestrictCandidate::class,
         'check.profile' => \App\Http\Middleware\CheckCandidateProfile::class,
+        'company.active' => \App\Http\Middleware\IsActiveCompany::class,
     ];
 }

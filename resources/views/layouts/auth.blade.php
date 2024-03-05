@@ -27,11 +27,11 @@
         <script>
 
             @auth
-                localstorage.setItem('email', "{{ auth()->user()->email }}")
-                localstorage.setItem('role', "{{ auth()->user()->role }}")
-                localstorage.setItem('verified', "{{ auth()->user()->emailVerifiedAt }}")
+                localStorage.setItem('email', "{{ auth()->user()->email }}")
+                localStorage.setItem('role', "{{ auth()->user()->role }}")
+                localStorage.setItem('verified', "{{ auth()->user()->emailVerifiedAt }}")
             @else
-                localstorage.clear()
+                localStorage.clear()
             @endauth
 
         </script>

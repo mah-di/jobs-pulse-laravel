@@ -136,22 +136,6 @@
         }
         @endif
 
-        @if (auth()->user()->company_id !== null)
-        checkBlogs()
-
-        async function checkBlogs() {
-            showLoader()
-            let res = await axios.get("{{ url('/api/company-plugin') }}/2/check")
-            hideLoader()
-
-            let blogNav = res.data['data'] === 0 ? document.getElementById('company-has-blog') : null
-
-            if (blogNav) {
-                blogNav.remove()
-            }
-        }
-        @endif
-
         </script>
 
 @stack('script')

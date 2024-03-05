@@ -127,42 +127,45 @@ Route::middleware('auth.jwt')->group(function () {
         Route::get('/company-overview', [CompanyController::class, 'companyOverview'])->name('company.overview');
         Route::post('/company', [CompanyController::class, 'update'])->name('company.update')->can('takeManagerialDecision', Company::class);
         Route::post('/company/activity/{company}', [CompanyController::class, 'updateActivity'])->name('company.update.activity')->can('updateActivity', 'company');
-
-        Route::get('/company-job', [JobController::class, 'getCompanyJobs'])->name('company.jobs');
-        Route::post('/job', [JobController::class, 'create'])->name('job.create')->can('takeManagerialDecision', Company::class);
-        Route::post('/job/{job}', [JobController::class, 'update'])->name('job.update')->can('update', 'job');
-        Route::post('/job/{job}/availability', [JobController::class, 'updateAvailability'])->name('job.availability.update')->can('updateAvailability', 'job');
-
-        Route::get('/job/{job}/applications', [JobApplicationController::class, 'receivedApplications'])->name('job.application.received')->can('viewApplications', 'job');
-        Route::post('/job-application/{application}/update-status', [JobApplicationController::class, 'updateStatus'])->name('job.application.update')->can('update', 'application');
-
-        Route::get('/company-employee', [EmployeeController::class, 'indexByCompany'])->name('employee.index.by.company');
-
-        Route::get('/candidate/{id}/profile', [CandidateProfileController::class, 'get'])->name('candidate.profile.get')->can('takeManagerialDecision', Company::class);
-
         Route::get('/company/activity/check', [CompanyController::class, 'isActive'])->name('company.check');
 
-        Route::get('/company-plugin/get', [CompanyPluginController::class, 'indexByCompany'])->name('company-plugin.index.get');
-        Route::get('/company-plugin/{plugin}/check', [CompanyPluginController::class, 'isActive'])->name('company-plugin.check');
-        Route::post('/company-plugin', [CompanyPluginController::class, 'save'])->name('company-plugin.save')->can('takeAdminDecision', Company::class);
-        Route::post('/company-plugin/{plugin}', [CompanyPluginController::class, 'updateStatus'])->name('company-plugin.update')->can('updateStatus', 'plugin');
+        Route::middleware('company.active')->group(function () {
+            Route::get('/company-job', [JobController::class, 'getCompanyJobs'])->name('company.jobs');
+            Route::post('/job', [JobController::class, 'create'])->name('job.create')->can('takeManagerialDecision', Company::class);
+            Route::post('/job/{job}', [JobController::class, 'update'])->name('job.update')->can('update', 'job');
+            Route::post('/job/{job}/availability', [JobController::class, 'updateAvailability'])->name('job.availability.update')->can('updateAvailability', 'job');
+
+            Route::get('/job/{job}/applications', [JobApplicationController::class, 'receivedApplications'])->name('job.application.received')->can('viewApplications', 'job');
+            Route::post('/job-application/{application}/update-status', [JobApplicationController::class, 'updateStatus'])->name('job.application.update')->can('update', 'application');
+
+            Route::get('/company-employee', [EmployeeController::class, 'indexByCompany'])->name('employee.index.by.company')->can('manageEmployee', Company::class);
+
+            Route::get('/candidate/{id}/profile', [CandidateProfileController::class, 'get'])->name('candidate.profile.get')->can('takeManagerialDecision', Company::class);
+
+            Route::get('/company-plugin/get', [CompanyPluginController::class, 'indexByCompany'])->name('company-plugin.index.get');
+            Route::get('/company-plugin/{plugin}/check', [CompanyPluginController::class, 'isActive'])->name('company-plugin.check');
+            Route::post('/company-plugin', [CompanyPluginController::class, 'save'])->name('company-plugin.save')->can('takeAdminDecision', Company::class);
+            Route::post('/company-plugin/{plugin}', [CompanyPluginController::class, 'updateStatus'])->name('company-plugin.update')->can('updateStatus', 'plugin');
+        });
     });
 
     Route::middleware('restrict.candidate')->group(function () {
         Route::get('/user/profile', [ProfileController::class, 'show'])->name('profile.show');
         Route::post('/user/profile', [ProfileController::class, 'update'])->name('profile.update');
 
-        Route::post('/employee', [EmployeeController::class, 'create'])->name('employee.create')->can('createEmployees', Company::class);
-        Route::post('/employee/{user}', [EmployeeController::class, 'assignRole'])->name('employee.assign.role')->can('updateOrDeleteEmployees', [Company::class, 'user']);
-        Route::delete('/employee/{user}', [EmployeeController::class, 'delete'])->name('employee.delete')->can('updateOrDeleteEmployees', [Company::class, 'user']);
+        Route::middleware('company.active')->group(function () {
+            Route::post('/employee', [EmployeeController::class, 'create'])->name('employee.create')->can('createEmployees', Company::class)->can('manageEmployee', Company::class);
+            Route::post('/employee/{user}', [EmployeeController::class, 'assignRole'])->name('employee.assign.role')->can('updateOrDeleteEmployees', [Company::class, 'user'])->can('manageEmployee', Company::class);
+            Route::delete('/employee/{user}', [EmployeeController::class, 'delete'])->name('employee.delete')->can('updateOrDeleteEmployees', [Company::class, 'user'])->can('manageEmployee', Company::class);
 
-        Route::get('/role', RoleController::class)->name('role.index');
+            Route::get('/role', RoleController::class)->name('role.index');
 
-        Route::post('/blog/create/{category}', [BlogController::class, 'create'])->name('blog.create')->can('create', [Blog::class, 'category']);
-        Route::post('/blog/{blog}', [BlogController::class, 'update'])->name('blog.update')->can('update', 'blog');
-        Route::delete('/blog/{blog}', [BlogController::class, 'delete'])->name('blog.delete')->can('delete', 'blog');
+            Route::post('/blog/create/{category}', [BlogController::class, 'create'])->name('blog.create')->can('useBlog', Company::class)->can('create', [Blog::class, 'category']);
+            Route::post('/blog/{blog}', [BlogController::class, 'update'])->name('blog.update')->can('useBlog', Company::class)->can('update', 'blog');
+            Route::delete('/blog/{blog}', [BlogController::class, 'delete'])->name('blog.delete')->can('useBlog', Company::class)->can('delete', 'blog');
 
-        Route::get('/plugin', [PluginController::class, 'index'])->name('plugin.index');
+            Route::get('/plugin', [PluginController::class, 'index'])->name('plugin.index');
+        });
     });
 
     Route::middleware('candidate.check')->group(function () {

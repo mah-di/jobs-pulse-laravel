@@ -26,7 +26,12 @@ class ReadTokenSetUser
         $payload = JWTHelper::verifyToken($token, $type);
 
         if ($payload) {
-            $user = User::find($payload->userID);
+            $q = User::query();
+
+            if ($payload->companyID)
+                $q = $q->with(['company' => fn ($sq) => $sq->select(['id', 'status', 'jobsPosted'])]);
+
+            $user = $q->find($payload->userID);
 
             if ($user) Auth::setUser($user);
         }

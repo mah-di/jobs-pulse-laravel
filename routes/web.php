@@ -53,13 +53,16 @@ Route::middleware(['redirect.anon', 'auth.jwt'])->group(function () {
 
     Route::middleware('companyUser.check')->group(function () {
         Route::get('/company-dashboard', fn () => view('pages.company-admin.dashboard'))->name('company.dashboard.view');
-        Route::get('/company-dashboard/company', fn () => view('pages.company-admin.company'))->name('company.view');
-        Route::get('/company-dashboard/blog', fn () => view('pages.company-admin.blog'))->name('company.blog.view');
-        Route::get('/company-dashboard/jobs', fn () => view('pages.company-admin.jobs'))->name('company.jobs.view');
-        Route::get('/company-dashboard/employees', fn () => view('pages.company-admin.employees'))->name('company.employees.view');
-        Route::get('/company-dashboard/applications', fn () => view('pages.company-admin.applications'))->name('company.applications.view')->can('takeManagerialDecision', Company::class);
         Route::get('/company-dashboard/profile', fn () => view('pages.company-admin.profile'))->name('profile.view');
-        Route::get('/company-dashboard/plugins', fn () => view('pages.company-admin.plugins'))->name('company.plugins.view')->can('takeAdminDecision', Company::class);
+        Route::get('/company-dashboard/company', fn () => view('pages.company-admin.company'))->name('company.view');
+
+        Route::middleware('company.active')->group(function () {
+            Route::get('/company-dashboard/blog', fn () => view('pages.company-admin.blog'))->name('company.blog.view')->can('useBlog', Company::class);
+            Route::get('/company-dashboard/jobs', fn () => view('pages.company-admin.jobs'))->name('company.jobs.view');
+            Route::get('/company-dashboard/employees', fn () => view('pages.company-admin.employees'))->name('company.employees.view')->can('manageEmployee', Company::class);
+            Route::get('/company-dashboard/applications', fn () => view('pages.company-admin.applications'))->name('company.applications.view')->can('takeManagerialDecision', Company::class);
+            Route::get('/company-dashboard/plugins', fn () => view('pages.company-admin.plugins'))->name('company.plugins.view')->can('takeAdminDecision', Company::class);
+        });
     });
 
     Route::middleware('candidate.check')->group(function () {

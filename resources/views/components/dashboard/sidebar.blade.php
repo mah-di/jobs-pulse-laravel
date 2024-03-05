@@ -22,21 +22,38 @@
                 <a href="{{ route('candidate.savedJobs.view') }}" class="nav-item nav-link {{ request()->routeIs('candidate.savedJobs.view') ? 'active' : '' }}"><i class="fa fa-th me-2"></i>Saved Jobs</a>
             @endif
 
+            {{-- Company Sidebar Start --}}
             @if (in_array(auth()->user()->role, ['Admin', 'Manager', 'Editor']))
                 <a href="{{ route('company.dashboard.view') }}" class="nav-item nav-link {{ request()->routeIs('candidate.dashboard.view') ? 'active' : '' }}"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                 <a href="{{ route('company.view') }}" class="nav-item nav-link {{ request()->routeIs('company.view') ? 'active' : '' }}"><i class="fa fa-building me-2"></i>Company</a>
+
+                @if (auth()->user()->company->status === 'ACTIVE')
+
+                @can('employeeCanAccess', \App\Models\Company::class)
+                @can('manageEmployee', \App\Models\Company::class)
                 <a href="{{ route('company.employees.view') }}" class="nav-item nav-link {{ request()->routeIs('company.employees.view') ? 'active' : '' }}"><i class="fa fa-users me-2"></i>Employees</a>
-                <a href="{{ route('company.blog.view') }}" id="company-has-blog" class="nav-item nav-link {{ request()->routeIs('company.blog.view') ? 'active' : '' }}"><i class="fa fa-briefcase me-2"></i>Blog</a>
+                @endcan
+
+                @can('useBlog', \App\Models\Company::class)
+                <a href="{{ route('company.blog.view') }}" id="company-has-blog" class="nav-item nav-link {{ request()->routeIs('company.blog.view') ? 'active' : '' }}"><i class="fa fa-briefcase me-2"></i>Blogs</a>
+                @endcan
+
                 <a href="{{ route('company.jobs.view') }}" class="nav-item nav-link {{ request()->routeIs('company.jobs.view') ? 'active' : '' }}"><i class="fa fa-briefcase me-2"></i>Jobs</a>
+                @endcan
+                @endif
+
             @endif
 
-            @if (in_array(auth()->user()->role, ['Admin', 'Manager']))
+            @if (in_array(auth()->user()->role, ['Admin', 'Manager']) and auth()->user()->company->status === 'ACTIVE')
+                @can('employeeCanAccess', \App\Models\Company::class)
                 <a href="{{ route('company.applications.view') }}" class="nav-item nav-link {{ request()->routeIs('company.applications.view') ? 'active' : '' }}"><i class="fa fa-arrow-down me-2"></i>Applications</a>
+                @endcan
             @endif
 
-            @if (auth()->user()->role === 'Admin')
+            @if (auth()->user()->role === 'Admin' and auth()->user()->company->status === 'ACTIVE')
                 <a href="{{ route('company.plugins.view') }}" class="nav-item nav-link {{ request()->routeIs('company.plugins.view') ? 'active' : '' }}"><i class="fa fa-th me-2"></i>Plugins</a>
             @endif
+            {{-- Company Sibebar Ends --}}
 
             @if (auth()->user()->isSuperUser)
                 <a href="{{ route('admin.dashboard.view') }}" class="nav-item nav-link {{ request()->routeIs('admin.dashboard.view') ? 'active' : '' }}"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>

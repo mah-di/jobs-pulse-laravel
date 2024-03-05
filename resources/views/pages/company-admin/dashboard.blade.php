@@ -4,7 +4,18 @@
 
     <div class="container-fluid pt-4 px-4">
         <div id="content-wrapper" class="row g-4">
+            @if (auth()->user()->company->status !== 'ACTIVE')
+            <div id="notActive">
+                <h4 class="text-danger">Your Company Is <i>{{ auth()->user()->company->status === 'PENDING' ? auth()->user()->company->status . ' Approval' : auth()->user()->company->status }}</i>.{{ auth()->user()->company->status === 'RESTRICTED' ? ' Contact with Us for Details.' : '' }}</h4>
+            </div>
+            @endif
 
+            @can('employeeCanAccess', \App\Models\Company::class)
+            @else
+            <div id="employeeInactive">
+                <h4 class="text-danger">Your Company's Employee Plugin Is <i>INACTIVE</i>. Please Contact with Your Company Administrator.</h4>
+            </div>
+            @endcan
         </div>
     </div>
 
@@ -17,6 +28,10 @@
         getOverview()
 
         async function getOverview() {
+            if (document.getElementById('notActive') || document.getElementById('employeeInactive')) {
+                return
+            }
+
             showLoader()
             let res = await axios.get("{{ route('company.overview') }}")
             hideLoader()

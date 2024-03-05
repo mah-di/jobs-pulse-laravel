@@ -55,6 +55,16 @@ class CompanyPolicy
         return false;
     }
 
+    public function manageEmployee(User $user)
+    {
+        return $user->isSuperUser or $user->company->companyPlugins()->where(['plugin_id' => Company::EMPLOYEE, 'status' => 'ACTIVE'])->exists();
+    }
+
+    public function employeeCanAccess(User $user)
+    {
+        return $user->role === 'Admin' or $user->company->companyPlugins()->where(['plugin_id' => Company::EMPLOYEE, 'status' => 'ACTIVE'])->exists();
+    }
+
     public function createEmployees(User $user)
     {
         if (in_array($user->role,  ['Site Admin', 'Admin']))
@@ -69,5 +79,10 @@ class CompanyPolicy
             return true;
 
         return false;
+    }
+
+    public function useBlog(User $user)
+    {
+        return $user->isSuperUser or $user->company->companyPlugins()->where(['plugin_id' => Company::BLOG, 'status' => 'ACTIVE'])->exists();
     }
 }

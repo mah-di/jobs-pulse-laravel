@@ -9,6 +9,9 @@ class Company extends Model
 {
     use HasFactory;
 
+    const EMPLOYEE = 1;
+    const BLOG = 2;
+
     protected $fillable = [
         'name',
         'logo',
@@ -45,7 +48,7 @@ class Company extends Model
 
     public function plugins()
     {
-        return $this->belongsToMany(Plugin::class);
+        return $this->belongsToMany(Plugin::class, CompanyPlugin::class);
     }
 
     public function blogCategories()
