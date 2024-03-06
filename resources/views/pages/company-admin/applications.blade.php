@@ -220,10 +220,9 @@
                                 <span>${item['candidate']['firstName']} ${item['candidate']['lastName']}</span>
                             </td>
                             <td><button class="btn btn-sm btn-primary viewDetail" data-application-id="${item['id']}" data-id="${item['candidate']['id']}"><i class="fas fa-eye"></i></button></td>
-                            <td><span class="badge bg-secondary">${item['status']}</span></td>
+                            <td><span class="badge ` + (item['status'] === 'PENDING' ? 'bg-secondary' : (item['status'] === 'ACCEPTED' ? 'bg-success' : 'bg-danger')) + `">${item['status']}</span></td>
                             <td>` +
-                                (item['status'] === 'REJECTED' ? `<button class="btn btn-sm btn-success accept" data-job-id="${id}" data-id="${item['id']}">Accept</button>` : '') +
-                                (item['status'] === 'ACCEPTED' ? `<button class="btn btn-sm btn-danger reject" data-job-id="${id}" data-id="${item['id']}">Reject</button>` : '')
+                                (item['status'] === 'PENDING' ? `<button class="btn btn-sm btn-success accept" data-job-id="${id}" data-id="${item['id']}">Accept</button>&nbsp;&nbsp;<button class="btn btn-sm btn-danger reject" data-job-id="${id}" data-id="${item['id']}">Reject</button>` : '')
                             + `</td>
                         </tr>
                     `

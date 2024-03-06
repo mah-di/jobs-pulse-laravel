@@ -9,7 +9,7 @@
                 <hr>
                 <div class="form-floating mb-3">
                     <input type="text" class="d-none" id="coverImg">
-                    <img id="display" class="mb-2" height="350px" width="100%" src="{{ asset('') }}" alt="">
+                    <img id="display" class="mb-2" height="350px" width="100%" src="" alt="">
                     <input oninput="display.src = window.URL.createObjectURL(this.files[0])" type="file" class="form-control" id="image">
                 </div>
                 <div class="form-floating mb-3">

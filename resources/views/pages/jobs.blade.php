@@ -4,7 +4,7 @@
 
     <!-- Hero Area Start-->
     <div class="slider-area ">
-        <div class="single-slider section-overly slider-height2 d-flex align-items-center" data-background="assets/img/hero/about.jpg">
+        <div class="single-slider section-overly slider-height2 d-flex align-items-center" data-background="{{ asset('assets/img/hero/listing.jpg') }}">
             <div class="container">
                 <div class="row">
                     <div class="col-xl-12">
@@ -42,6 +42,17 @@
                     <div class=" mb-50" id="filterTab">
                         <!-- single one -->
                         <div class="">
+                            <div class="small-section-tittle2">
+                                <h4>Search</h4>
+                            </div>
+                            <!-- Select job items start -->
+                            <div class="form-select d-flex">
+                                <input class="form-control" type="text" id="keyword">
+                                <button onclick="keywordSearch()" class="btn-primary" style="height: 38px"><i class="fa fa-search"></i></button>
+                            </div>
+                            <!-- select-Categories End -->
+                        </div>
+                        <div class="mt-4">
                             <div class="small-section-tittle2">
                                 <h4>Job Category</h4>
                             </div>
@@ -149,10 +160,6 @@
 
         getData(url)
 
-        function clearFilters(){
-
-        }
-
         async function getCategories(){
             showLoader()
             let res = await axios.get("{{ route('job.category.index') }}")
@@ -176,6 +183,7 @@
             const urlParams = new URLSearchParams(params);
 
             // Get the values of the parameters you need
+            const q = urlParams.get('q');
             const category = urlParams.get('category');
             const type = urlParams.get('type');
             const skill = urlParams.get('skill');
@@ -184,6 +192,9 @@
 
             // Create the API URL
             const apiParams = new URLSearchParams();
+            if (q) {
+                apiParams.append('q', q);
+            }
             if (category) {
                 apiParams.append('category', category);
             }
@@ -304,10 +315,20 @@
 
         }
 
-        // Get the select element
+        function keywordSearch() {
+            let q = document.getElementById('keyword').value
+
+            if (q.length === 0) {return}
+
+            const currentUrl = window.location.href
+            const url = new URL(currentUrl)
+            url.searchParams.set('q', q)
+
+            window.location.href = url.toString()
+        }
+
         const selectType = document.getElementById('selectType');
 
-        // Add event listener to the select element
         selectType.addEventListener('change', function() {
             // Get the selected value
             const selectedValue = this.value;
@@ -330,11 +351,13 @@
         });
 
         document.addEventListener('DOMContentLoaded', function() {
-            // Get the value of the "type" query parameter from the URL
             const urlParams = new URLSearchParams(window.location.search);
+            const qParam = urlParams.get('q');
             const typeParam = urlParams.get('type');
 
-            // If the "type" query parameter exists and matches one of the option values, set it as selected
+            if (qParam) {
+                document.getElementById('keyword').value = qParam
+            }
             if (typeParam) {
                 const selectType = document.getElementById('selectType');
                 const optionType = selectType.querySelector(`option[value="${typeParam}"]`);
@@ -345,10 +368,8 @@
             }
         });
 
-        // Get the select element
         const selectCategory = document.getElementById('selectCategory');
 
-        // Add event listener to the select element
         selectCategory.addEventListener('change', function() {
             // Get the selected value
             const selectedValue = this.value;

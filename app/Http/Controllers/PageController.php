@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Helpers\ImageHelper;
 use App\Helpers\ResponseHelper;
+use App\Mail\ContactMail;
 use App\Models\Page;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rules\File as FileRule;
 
 class PageController extends Controller
@@ -49,7 +51,7 @@ class PageController extends Controller
 
             if ($request->hasFile('image')) {
                 ImageHelper::delete($coverImg);
-                $coverImg = ImageHelper::save($request->file('image'), 'assets/hero', 'about');
+                $coverImg = ImageHelper::save($request->file('image'), 'assets/img/hero', 'about');
             }
 
             Page::where('type', 'About')->update([
@@ -95,7 +97,7 @@ class PageController extends Controller
             ]);
 
             if ($request->hasFile('image')) {
-                ImageHelper::delete('assets/img/hero/contact.jpg');
+                ImageHelper::delete($coverImg);
                 $coverImg = ImageHelper::save($request->file('image'), 'assets/img/hero', 'contact');
             }
 
@@ -111,6 +113,30 @@ class PageController extends Controller
                 'Contact page information updated!'
             );
 
+        } catch (Exception $exception) {
+            return ResponseHelper::make(
+                'fail',
+                null,
+                $exception->getMessage()
+            );
+        }
+    }
+
+    public function sendContactMail(Request $request)
+    {
+        try {
+            $request->validate([
+                'email' =>['required', 'email'],
+                'message' => ['required'],
+            ]);
+
+            Mail::to('support@jobspulse.com')->send(new ContactMail($request->name, $request->email, $request->subject, $request->message));
+
+            return ResponseHelper::make(
+                'fail',
+                null,
+                'Mail sent. Our support team will contact you soon!'
+            );
         } catch (Exception $exception) {
             return ResponseHelper::make(
                 'fail',

@@ -13,13 +13,6 @@ return new class extends Migration
     {
         Schema::create('blog_categories', function (Blueprint $table) {
             $table->id();
-
-            $table->foreignId('company_id')
-                ->nullable()
-                ->constrained()
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
-
             $table->string('name');
 
             $table->timestamp('created_at')->useCurrent();

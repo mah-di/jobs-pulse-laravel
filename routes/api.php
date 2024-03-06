@@ -50,6 +50,7 @@ Route::middleware('guest.check')->group(function () {
 });
 
 Route::get('/page/{type}', [PageController::class, 'show'])->name('page.show');
+Route::post('/support', [PageController::class, 'sendContactMail'])->name('send.contactMail');
 
 Route::get('/top-companies', [CompanyController::class, 'topCompanies'])->name('company.top');
 Route::get('/company/{id}', [CompanyController::class, 'show'])->name('company.show');

@@ -6,7 +6,7 @@ use Illuminate\Http\UploadedFile;
 
 class ImageHelper
 {
-    public static function save(UploadedFile $file, string $folderName, string $filename = null)
+    public static function save(UploadedFile $file, string $folderName, ?string $filename = null)
     {
         if (!$filename) {
             $filename = uuid_create() . '.' . $file->getClientOriginalExtension();
@@ -15,8 +15,8 @@ class ImageHelper
         }
         else {
             $filename .= '.' . $file->getClientOriginalExtension();
-            $fileUrl = "storage/{$folderName}/{$filename}";
-            $file->storeAs($folderName, $filename);
+            $fileUrl = "{$folderName}/{$filename}";
+            $file->move(public_path($folderName), $filename);
         }
 
         return $fileUrl;

@@ -6,7 +6,7 @@
         <div class="d-flex align-items-center ms-4 mb-4">
             <div class="position-relative">
                 <a href="{{ auth()->user()->role === 'Candidate' ? route('candidate.profile.view') : (auth()->user()->isSuperUser ? route('admin.profile.view') : route('profile.view')) }}">
-                    <img class="rounded-circle profileImg" src="{{ url('') . '/' . env('DEFAULT_PROFILE_IMG') }}" alt="" style="width: 40px; height: 40px;">
+                    <img class="rounded-circle profileImg" src="{{ url(env('DEFAULT_PROFILE_IMG')) }}" alt="" style="width: 40px; height: 40px;">
                     <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
                 </a>
             </div>
@@ -24,7 +24,7 @@
 
             {{-- Company Sidebar Start --}}
             @if (in_array(auth()->user()->role, ['Admin', 'Manager', 'Editor']))
-                <a href="{{ route('company.dashboard.view') }}" class="nav-item nav-link {{ request()->routeIs('candidate.dashboard.view') ? 'active' : '' }}"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                <a href="{{ route('company.dashboard.view') }}" class="nav-item nav-link {{ request()->routeIs('company.dashboard.view') ? 'active' : '' }}"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                 <a href="{{ route('company.view') }}" class="nav-item nav-link {{ request()->routeIs('company.view') ? 'active' : '' }}"><i class="fa fa-building me-2"></i>Company</a>
 
                 @if (auth()->user()->company->status === 'ACTIVE')

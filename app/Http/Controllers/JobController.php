@@ -196,6 +196,9 @@ class JobController extends Controller
         try {
             $q = Job::where('status', 'available');
 
+            if ($request->query('q'))
+                $q = $q->where('title', 'LIKE', "%{$request->query('q')}%");
+
             if ($request->query('category'))
                 $q = $q->where('job_category_id', '=', $request->query('category'));
 
