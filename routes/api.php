@@ -68,7 +68,9 @@ Route::get('/job/{id}/applications/count', [JobApplicationController::class, 're
 Route::get('/blog-category', [BlogCategoryController::class, 'index'])->name('blog.category.index');
 Route::get('/blog-category/{id}', [BlogCategoryController::class, 'show'])->name('blog.category.show');
 
-Route::get('/blog/index/{companyId}', [BlogController::class, 'index'])->name('blog.index.by.company');
+Route::get('/blog/index', [BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/user/{profileId}', [BlogController::class, 'indexByUser'])->name('blog.index.by.user');
+Route::get('/blog/company/{companyId}', [BlogController::class, 'indexByCompany'])->name('blog.index.by.company');
 Route::get('/blog/category/{categoryId}', [BlogController::class, 'indexByCategory'])->name('blog.index.by.category');
 Route::get('/blog/{id}', [BlogController::class, 'show'])->name('blog.show');
 
@@ -161,7 +163,7 @@ Route::middleware('auth.jwt')->group(function () {
 
             Route::get('/role', RoleController::class)->name('role.index');
 
-            Route::post('/blog/create/{category}', [BlogController::class, 'create'])->name('blog.create')->can('useBlog', Company::class)->can('create', [Blog::class, 'category']);
+            Route::post('/blog/create/{category}', [BlogController::class, 'create'])->name('blog.create')->can('useBlog', Company::class);
             Route::post('/blog/{blog}', [BlogController::class, 'update'])->name('blog.update')->can('useBlog', Company::class)->can('update', 'blog');
             Route::delete('/blog/{blog}', [BlogController::class, 'delete'])->name('blog.delete')->can('useBlog', Company::class)->can('delete', 'blog');
 

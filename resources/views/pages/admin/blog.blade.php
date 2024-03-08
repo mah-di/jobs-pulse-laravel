@@ -237,12 +237,12 @@
             }
         }
 
-        async function getAllBlogs(url = `{{ url('/api/blog/company') . '/' . auth()->user()->company_id }}`) {
+        async function getAllBlogs(url = `{{ route('blog.index') }}`) {
             showLoader()
             let res = await axios.get(url)
             hideLoader()
 
-            if (url === `{{ url('/api/blog/company') . '/' . auth()->user()->company_id }}`) {
+            if (url === `{{ route('blog.index') }}`) {
                 document.getElementById('all-wrapper').innerHTML = ''
             }
 
@@ -271,7 +271,7 @@
                             <td>${element['profile']['firstName']} ${element['profile']['lastName']}</td>
                             <td>${element['category']['name']}</td>
                             <td>${postDate}</td>
-                            <td><a href="{{ url('/blog') }}/${element['id']}" class="btn btn-success"><i class="fa fa-eye"></i></a>` + ("{{ auth()->user()->role }}" === 'Admin' ? `&nbsp;&nbsp;<button class="btn btn-danger delete" data-id="${element['id']}">Delete</button>` : '') + `</td>
+                            <td><a href="{{ url('/blog') }}/${element['id']}" class="btn btn-success"><i class="fa fa-eye"></i></a>` + ("{{ auth()->user()->role }}" === 'Site Admin' ? `&nbsp;&nbsp;<button class="btn btn-danger delete" data-id="${element['id']}">Delete</button>` : '') + `</td>
                         </tr>`
 
                     document.getElementById('all-wrapper').innerHTML += content

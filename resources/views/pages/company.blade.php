@@ -166,10 +166,8 @@
 
                 const trimmedString = element['skills'].trim().replace(/,$/, '');
 
-                // Split the string into an array using commas as the delimiter
                 const itemsArray = trimmedString.split(',');
 
-                // Create HTML string for badges and append them to the container
                 const badgesHTML = itemsArray.map(createBadgeHTML).join('');
 
                 const canApply = localStorage.getItem('role') === 'Candidate'

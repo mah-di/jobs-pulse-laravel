@@ -16,14 +16,6 @@ class BlogPolicy
         //
     }
 
-    public function create(User $user, BlogCategory $category)
-    {
-        if ($user->company_id === $category->company_id)
-            return true;
-
-        return false;
-    }
-
     public function update(User $user, Blog $blog)
     {
         if ($user->profile()->pluck('id')->first() === $blog->profile_id)
@@ -34,7 +26,7 @@ class BlogPolicy
 
     public function delete(User $user, Blog $blog)
     {
-        if ($user->profile()->pluck('id')->first() === $blog->profile_id or (in_array($user->role, ['Site Admin', 'Admin']) and $user->company_id === $blog->company_id))
+        if ($user->profile()->pluck('id')->first() === $blog->profile_id or $user->role === 'Site Admin' or ($user->role === 'Admin' and $user->company_id === $blog->company_id))
             return true;
 
         return false;

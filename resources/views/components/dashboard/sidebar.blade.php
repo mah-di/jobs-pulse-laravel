@@ -63,6 +63,7 @@
                 <a href="{{ route('admin.department.view') }}" class="nav-item nav-link {{ request()->routeIs('admin.department.view') ? 'active' : '' }}"><i class="fa fa-users me-2"></i>Department</a>
                 <a href="{{ route('admin.jobCategory.view') }}" class="nav-item nav-link {{ request()->routeIs('admin.jobCategory.view') ? 'active' : '' }}"><i class="fa fa-users me-2"></i>Job Category</a>
                 <a href="{{ route('admin.blogCategory.view') }}" class="nav-item nav-link {{ request()->routeIs('admin.blogCategory.view') ? 'active' : '' }}"><i class="fa fa-users me-2"></i>Blog Category</a>
+                <a href="{{ route('admin.blog.view') }}" class="nav-item nav-link {{ request()->routeIs('admin.blog.view') ? 'active' : '' }}"><i class="fa fa-users me-2"></i>Blog</a>
 
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Pages</a>

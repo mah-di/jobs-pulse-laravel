@@ -30,6 +30,8 @@ Route::get('/contact', fn () => view('pages.contact'))->name('contact.view');
 Route::get('/jobs', fn () => view('pages.jobs'))->name('jobs.view');
 Route::get('/job/{id}', fn ($id) => view('pages.job-details'))->name('job.details.view');
 Route::get('/company/{id}', fn ($id) => view('pages.company'))->name('company.view');
+Route::get('/blogs', fn () => view('pages.blogs'))->name('blogs.view');
+Route::get('/blog/{id}', fn () => view('pages.blog'))->name('blog.view');
 
 Route::middleware(['redirect.anon', 'auth.jwt'])->group(function () {
 
@@ -45,6 +47,7 @@ Route::middleware(['redirect.anon', 'auth.jwt'])->group(function () {
         Route::get('/jobs-pulse/admin/dashboard/department', fn () => view('pages.admin.department'))->name('admin.department.view');
         Route::get('/jobs-pulse/admin/dashboard/job-category', fn () => view('pages.admin.job-category'))->name('admin.jobCategory.view');
         Route::get('/jobs-pulse/admin/dashboard/blog-category', fn () => view('pages.admin.blog-category'))->name('admin.blogCategory.view');
+        Route::get('/jobs-pulse/admin/dashboard/blog', fn () => view('pages.admin.blog'))->name('admin.blog.view');
         Route::get('/jobs-pulse/admin/dashboard/plugin', fn () => view('pages.admin.plugin'))->name('admin.plugin.view')->can('takeImportantDecision', Company::class);
         Route::get('/jobs-pulse/admin/dashboard/profile', fn () => view('pages.admin.profile'))->name('admin.profile.view');
         Route::get('/jobs-pulse/admin/dashboard/page/about', fn () => view('pages.admin.about'))->name('admin.about.view');

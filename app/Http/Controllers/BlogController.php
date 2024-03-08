@@ -12,10 +12,43 @@ use Illuminate\Validation\Rules\File as FileRule;
 
 class BlogController extends Controller
 {
-    public function index(string $companyId)
+    public function index()
     {
         try {
-            $data = Blog::where('company_id', $companyId)->with('profile')->paginate(20);
+            $data = Blog::latest()->with(['profile', 'category'])->paginate(20);
+
+            return ResponseHelper::make(
+                'success',
+                $data,
+            );
+
+        } catch (Exception $exception) {
+            return ResponseHelper::make('fail', null, $exception->getMessage());
+        }
+    }
+
+    public function indexByUser(string $profileId)
+    {
+        try {
+            $data = Blog::latest()->where('profile_id', $profileId)->with(['profile', 'category'])->paginate(5);
+
+            return ResponseHelper::make(
+                'success',
+                $data,
+            );
+
+        } catch (Exception $exception) {
+            return ResponseHelper::make('fail', null, $exception->getMessage());
+        }
+    }
+
+    public function indexByCompany(string $companyId)
+    {
+        try {
+            if ($companyId === '0')
+                $data = Blog::latest()->where('company_id', null)->with(['profile', 'category'])->paginate(5);
+            else
+                $data = Blog::latest()->where('company_id', $companyId)->with(['profile', 'category'])->paginate(5);
 
             return ResponseHelper::make(
                 'success',
@@ -30,7 +63,7 @@ class BlogController extends Controller
     public function indexByCategory(string $categoryId)
     {
         try {
-            $data = Blog::where('blog_category_id', $categoryId)->with('profile')->paginate(20);
+            $data = Blog::latest()->where('blog_category_id', $categoryId)->with(['profile', 'category'])->paginate(5);
 
             return ResponseHelper::make(
                 'success',

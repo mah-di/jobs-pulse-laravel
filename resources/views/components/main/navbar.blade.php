@@ -27,6 +27,7 @@
                                             @endif
                                         @endauth
                                         <li><a href="{{ route('jobs.view') }}">Job Listing</a></li>
+                                        <li><a href="{{ route('blogs.view') }}">Blogs</a></li>
                                         <li><a href="{{ route('about.view') }}">About</a></li>
                                         <li><a href="{{ route('contact.view') }}">Contact</a></li>
                                     </ul>
