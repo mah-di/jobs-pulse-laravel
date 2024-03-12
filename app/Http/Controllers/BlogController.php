@@ -90,10 +90,11 @@ class BlogController extends Controller
         }
     }
 
-    public function create(Request $request, BlogCategory $category)
+    public function create(Request $request)
     {
         try {
             $request->validate([
+                'blog_category_id' => ['required', 'exists:blog_categories,id'],
                 'title' => ['required', 'string'],
                 'body' => ['required', 'string'],
                 'image' => ['nullable', FileRule::image()->max(2048)],
@@ -109,7 +110,7 @@ class BlogController extends Controller
             $data = Blog::create([
                 'company_id' => $user->company_id,
                 'profile_id' => $user->profile()->pluck('id')->first(),
-                'blog_category_id' => $category->id,
+                'blog_category_id' => $request->blog_category_id,
                 'title' => $request->title,
                 'body' => $request->body,
                 'coverImg' => $coverImgUrl,

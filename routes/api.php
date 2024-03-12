@@ -160,9 +160,7 @@ Route::middleware('auth.jwt')->group(function () {
             Route::post('/employee/{user}', [EmployeeController::class, 'assignRole'])->name('employee.assign.role')->can('updateOrDeleteEmployees', [Company::class, 'user'])->can('manageEmployee', Company::class);
             Route::delete('/employee/{user}', [EmployeeController::class, 'delete'])->name('employee.delete')->can('updateOrDeleteEmployees', [Company::class, 'user'])->can('manageEmployee', Company::class);
 
-            Route::get('/role', RoleController::class)->name('role.index');
-
-            Route::post('/blog/create/{category}', [BlogController::class, 'create'])->name('blog.create')->can('useBlog', Company::class);
+            Route::post('/blog', [BlogController::class, 'create'])->name('blog.create')->can('useBlog', Company::class);
             Route::post('/blog/{blog}', [BlogController::class, 'update'])->name('blog.update')->can('useBlog', Company::class)->can('update', 'blog');
             Route::delete('/blog/{blog}', [BlogController::class, 'delete'])->name('blog.delete')->can('useBlog', Company::class)->can('delete', 'blog');
 

@@ -340,17 +340,18 @@
         }
 
         async function create() {
-            let category = document.getElementById('createCategory').value
+            let blog_category_id = document.getElementById('createCategory').value
             let title = document.getElementById('createTitle').value
             let body = document.getElementById('createBody').value
             let image = document.getElementById('createCoverImg').files[0] ?? null
 
-            if (category.length === 0) {
+            if (blog_category_id.length === 0) {
                 return alert("Plesae select a category.")
             }
 
             let data = new FormData()
 
+            data.append('blog_category_id', blog_category_id)
             data.append('title', title)
             data.append('body', body)
             image !== null ? data.append('image', image) : null
@@ -362,7 +363,7 @@
             }
 
             showLoader()
-            let res = await axios.post(`{{ url('/api/blog/create') }}/${category}`, data, config)
+            let res = await axios.post(`{{ route('blog.create') }}`, data, config)
             hideLoader()
 
             if (res.data['status'] === 'success') {
