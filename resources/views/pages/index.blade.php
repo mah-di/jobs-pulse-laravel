@@ -5,12 +5,12 @@
     <div class="slider-area ">
         <!-- Mobile Menu -->
         <div class="slider-active">
-            <div class="single-slider slider-height d-flex align-items-center" data-background="{{ asset('assets/img/hero/h1_hero.jpg') }}">
+            <div id="hero" class="single-slider slider-height d-flex align-items-center">
                 <div class="container">
                     <div class="row">
                         <div class="col-xl-6 col-lg-9 col-md-10">
                             <div class="hero__caption">
-                                <h1>Find the most exciting startup jobs</h1>
+                                <h1 id="title"></h1>
                             </div>
                         </div>
                     </div>
@@ -155,8 +155,25 @@
 
     <script>
 
+        getPageDetails()
         getTopCompanies()
         recentJobsInitialize()
+
+        async function getPageDetails() {
+            showLoader()
+            let res = await axios.get(`{{ url('/api/page') }}/home`)
+            hideLoader()
+
+            if (res.data['status'] === 'success') {
+                let data = res.data['data']
+
+                let div = document.getElementById('hero')
+                div.style.backgroundImage = `url("{{ url('') }}/${data['coverImg']}")`
+
+                document.getElementById('title').innerText = data['title']
+                document.getElementById('recentJobsHeading').innerText = data['description']['recentJobsHeading']
+            }
+        }
 
     </script>
 

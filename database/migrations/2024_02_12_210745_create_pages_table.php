@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('pages', function (Blueprint $table) {
             $table->id();
-            $table->enum('type', ['About', 'Contact'])->unique();
+            $table->enum('type', ['Home', 'Job-Listing', 'Blogs', 'Single-Blog', 'About', 'Contact'])->unique();
             $table->string('title');
             $table->json('description');
             $table->string('coverImg');

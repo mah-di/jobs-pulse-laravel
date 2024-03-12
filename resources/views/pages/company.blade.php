@@ -63,7 +63,7 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="count-job mb-35">
-                                <b>Open Jobs</b>
+                                <h2>Open Jobs</h2>
                             </div>
                         </div>
                     </div>
@@ -88,6 +88,36 @@
         </div>
     </div>
 
+    <section class="blog_area section-padding">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mb-5 mb-lg-0">
+                    <div class="blog_left_sidebar">
+                        <div class="count-job mb-35">
+                            <h2 id="blogs-title">Blogs</h2>
+                        </div>
+                        <div id="blogs-wrapper"></div>
+
+                        <div class="pagination-area pb-55 text-center">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-xl-12">
+                                        <div class="single-wrap d-flex justify-content-center">
+                                            <nav aria-label="Page navigation example">
+                                                <ul id="blogs-paginate" class="pagination justify-content-start">
+                                                </ul>
+                                            </nav>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
 @endsection
 
 @push('script')
@@ -95,7 +125,6 @@
     <script>
 
         getCompany()
-
 
         async function getCompany() {
             // Get the current URL
@@ -134,6 +163,7 @@
             }
 
             await getJobs(`{{ url('/api/job/company') }}/${companyId}`)
+            await getBlogs(`{{ url('/api/blog/company') }}/${companyId}`)
         }
 
         function createBadgeHTML(item) {
@@ -237,6 +267,60 @@
                 });
             });
 
+        }
+
+        async function getBlogs(url) {
+            showLoader()
+            let response = await axios.get(url);
+            hideLoader()
+
+            if (response.data['data']['total'] === 0) {
+                document.getElementById('blogs-title').remove()
+                return
+            }
+
+            document.querySelector('#blogs-paginate').innerHTML = ``
+            if (response.data['data']['next_page_url']) {
+                document.querySelector('#blogs-paginate').innerHTML = `<li class="page-item"><span id="loadMore" data-url="${response.data['data']['next_page_url']}" class="page-link">Load More</span></li>`
+
+                $('#loadMore').click(() => {
+                    let url = $('#loadMore').data('url')
+                    getData(url)
+                })
+            }
+
+            response.data['data']['data'].forEach(element => {
+                const posted = new Date(element['created_at']);
+
+                const optionDay = {day: 'numeric'};
+                const optionMonth = {month: 'short'};
+
+                const postDay = posted.toLocaleString('en-US', optionDay);
+                const postMonth = posted.toLocaleString('en-US', optionMonth);
+
+                let card = `
+                <article class="blog_item">
+                    <div class="blog_item_img">
+                        <img class="card-img rounded-0" src="{{ url('') }}/${element['coverImg']}" alt="">
+                        <a href="{{ url('/blog') }}/${element['id']}" class="blog_item_date">
+                            <h3>${postDay}</h3>
+                            <p>${postMonth}</p>
+                        </a>
+                    </div>
+
+                    <div class="blog_details">
+                        <a class="d-inline-block" href="{{ url('/blog') }}/${element['id']}">
+                            <h2>${element['title']}</h2>
+                        </a>
+                        <p>${element['body'].slice(0, 50)}</p>
+                        <ul class="blog-info-link">
+                            <li><a href="{{ url('/blogs') }}?category=${element['category']['id']}"><i class="fa fa-user"></i>${element['category']['name']}</a></li>
+                        </ul>
+                    </div>
+                </article>`
+
+                document.querySelector('#blogs-wrapper').innerHTML += card
+            });
         }
 
     </script>

@@ -32,60 +32,36 @@ class PageController extends Controller
         }
     }
 
-    public function saveAbout(Request $request)
+    public function validateDescription(Request $request)
     {
-        try {
-            $request->validate([
-                'title' => ['required'],
-                'coverImg' => ['required'],
-                'image' => ['nullable', FileRule::image()->max(10240)],
+        if ($request->type === 'Home') {
+            return $request->validate([
+                'recentJobsHeading' => ['required'],
             ]);
-
-            $coverImg = $request->coverImg;
-            $data = $request->validate([
+        }
+        if ($request->type === 'Job-Listing') {
+            return [];
+        }
+        if ($request->type === 'Blogs') {
+            return $request->validate([
+                'categoryTitle' => ['required'],
+            ]);
+        }
+        if ($request->type === 'Single-Blog') {
+            return $request->validate([
+                'categoryTitle' => ['required'],
+            ]);
+        }
+        if ($request->type === 'About') {
+            return $request->validate([
                 'subHeading' => ['required'],
                 'heading' => ['required'],
                 'shortDesc' => ['required'],
                 'longDesc' => ['required'],
             ]);
-
-            if ($request->hasFile('image')) {
-                ImageHelper::delete($coverImg);
-                $coverImg = ImageHelper::save($request->file('image'), 'assets/img/hero', 'about');
-            }
-
-            Page::where('type', 'About')->update([
-                'title' => $request->title,
-                'description' => $data,
-                'coverImg' => $coverImg
-            ]);
-
-            return ResponseHelper::make(
-                'success',
-                null,
-                'About page information updated!'
-            );
-
-        } catch (Exception $exception) {
-            return ResponseHelper::make(
-                'fail',
-                null,
-                $exception->getMessage()
-            );
         }
-    }
-
-    public function saveContact(Request $request)
-    {
-        try {
-            $request->validate([
-                'title' => ['required'],
-                'coverImg' => ['required'],
-                'image' => ['nullable', FileRule::image()->max(10240)],
-            ]);
-
-            $coverImg = $request->coverImg;
-            $data = $request->validate([
+        if ($request->type === 'Contact') {
+            return $request->validate([
                 'heading' => ['required'],
                 'city' => ['required'],
                 'state' => ['required'],
@@ -95,13 +71,28 @@ class PageController extends Controller
                 'activeHours' => ['required'],
                 'email' => ['required'],
             ]);
+        }
+    }
+
+    public function save(Request $request)
+    {
+        try {
+            $request->validate([
+                'type' => ['required', 'in:Home,Job-Listing,Blogs,Single-Blog,About,Contact'],
+                'title' => ['required'],
+                'coverImg' => ['required'],
+                'image' => ['nullable', FileRule::image()->max(10240)],
+            ]);
+
+            $coverImg = $request->coverImg;
+            $data = $this->validateDescription($request);
 
             if ($request->hasFile('image')) {
                 ImageHelper::delete($coverImg);
-                $coverImg = ImageHelper::save($request->file('image'), 'assets/img/hero', 'contact');
+                $coverImg = ImageHelper::save($request->file('image'), 'assets/img/hero', strtolower($request->type));
             }
 
-            Page::where('type', 'Contact')->update([
+            Page::where('type', $request->type)->update([
                 'title' => $request->title,
                 'description' => $data,
                 'coverImg' => $coverImg
@@ -110,7 +101,7 @@ class PageController extends Controller
             return ResponseHelper::make(
                 'success',
                 null,
-                'Contact page information updated!'
+                "{$request->type} page information updated!"
             );
 
         } catch (Exception $exception) {

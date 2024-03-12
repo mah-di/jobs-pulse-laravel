@@ -4,12 +4,12 @@
 
     <!-- Hero Area Start-->
     <div class="slider-area ">
-        <div class="single-slider section-overly slider-height2 d-flex align-items-center" data-background="{{ asset('assets/img/hero/listing.jpg') }}">
+        <div id="cover" class="single-slider section-overly slider-height2 d-flex align-items-center">
             <div class="container">
                 <div class="row">
                     <div class="col-xl-12">
                         <div class="hero-cap text-center">
-                            <h2>Get your job</h2>
+                            <h2 id="title"></h2>
                         </div>
                     </div>
                 </div>
@@ -127,6 +127,8 @@
 
     <script>
 
+        getPageDetails()
+
         if (window.location.search) {
             let clearFilterBtn = `<div class="mt-5"><button id="clearFilters" class="btn btn-lg" style="width:100%">Clear Filters</button></div>`
 
@@ -159,6 +161,21 @@
         })
 
         getData(url)
+
+        async function getPageDetails() {
+            showLoader()
+            let res = await axios.get(`{{ url('/api/page') }}/job-listing`)
+            hideLoader()
+
+            if (res.data['status'] === 'success') {
+                let data = res.data['data']
+
+                let div = document.getElementById('cover')
+                div.style.backgroundImage = `url("{{ url('') }}/${data['coverImg']}")`
+
+                document.getElementById('title').innerText = data['title']
+            }
+        }
 
         async function getCategories(){
             showLoader()

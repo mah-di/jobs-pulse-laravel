@@ -57,7 +57,7 @@
                             <div class="p-3">
                                 <div class="form-floating mb-3">
                                     <select class="form-select mb-3" aria-label="Default select example" id="createCategory">
-                                        <option>Category *</option>
+                                        <option value="">Select a Category</option>
                                     </select>
                                     <label for="floatingInput">Category *</label>
                                 </div>
@@ -98,7 +98,7 @@
                                 <input id="updateID" type="text" class="d-none">
                                 <div class="form-floating mb-3">
                                     <select class="form-select mb-3" aria-label="Default select example" id="updateCategory">
-                                        <option>Category *</option>
+                                        <option value="">Select a Category</option>
                                     </select>
                                     <label for="floatingInput">Category *</label>
                                 </div>
@@ -305,6 +305,10 @@
             let coverImg = document.getElementById('updateCoverImg').value
             let image = document.getElementById('updateImage').files[0] ?? null
 
+            if (blog_category_id.length === 0) {
+                return alert("Plesae select a category.")
+            }
+
             let data = new FormData()
 
             data.append('blog_category_id', blog_category_id)
@@ -340,6 +344,10 @@
             let title = document.getElementById('createTitle').value
             let body = document.getElementById('createBody').value
             let image = document.getElementById('createCoverImg').files[0] ?? null
+
+            if (category.length === 0) {
+                return alert("Plesae select a category.")
+            }
 
             let data = new FormData()
 

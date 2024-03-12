@@ -50,6 +50,10 @@ Route::middleware(['redirect.anon', 'auth.jwt'])->group(function () {
         Route::get('/jobs-pulse/admin/dashboard/blog', fn () => view('pages.admin.blog'))->name('admin.blog.view');
         Route::get('/jobs-pulse/admin/dashboard/plugin', fn () => view('pages.admin.plugin'))->name('admin.plugin.view')->can('takeImportantDecision', Company::class);
         Route::get('/jobs-pulse/admin/dashboard/profile', fn () => view('pages.admin.profile'))->name('admin.profile.view');
+        Route::get('/jobs-pulse/admin/dashboard/page/home', fn () => view('pages.admin.home'))->name('admin.home.view');
+        Route::get('/jobs-pulse/admin/dashboard/page/job-listing', fn () => view('pages.admin.job-listing'))->name('admin.jobListing.view');
+        Route::get('/jobs-pulse/admin/dashboard/page/blogs', fn () => view('pages.admin.blogs'))->name('admin.blogs.view');
+        Route::get('/jobs-pulse/admin/dashboard/page/single-blog', fn () => view('pages.admin.single-blog'))->name('admin.singleBlog.view');
         Route::get('/jobs-pulse/admin/dashboard/page/about', fn () => view('pages.admin.about'))->name('admin.about.view');
         Route::get('/jobs-pulse/admin/dashboard/page/contact', fn () => view('pages.admin.contact'))->name('admin.contact.view');
     });

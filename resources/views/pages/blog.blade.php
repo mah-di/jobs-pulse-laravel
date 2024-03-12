@@ -3,12 +3,12 @@
 @section('main')
 
     <div class="slider-area ">
-        <div class="single-slider section-overly slider-height2 d-flex align-items-center" data-background="assets/img/hero/about.jpg" style="background-image: url(&quot;assets/img/hero/about.jpg&quot;);">
+        <div id="cover" class="single-slider section-overly slider-height2 d-flex align-items-center">
             <div class="container">
                 <div class="row">
                     <div class="col-xl-12">
                         <div class="hero-cap text-center">
-                            <h2>Blog Details</h2>
+                            <h2 id="pageTitle"></h2>
                         </div>
                     </div>
                 </div>
@@ -34,6 +34,7 @@
                     </div>
                  </div>
                  <div class="blog-author">
+                    <h2>Author</h2>
                     <div class="media align-items-center">
                        <img id="profileImg" alt="">
                        <div class="media-body">
@@ -48,7 +49,7 @@
               <div class="col-lg-4">
                  <div class="blog_right_sidebar">
                     <aside class="single_sidebar_widget post_category_widget">
-                        <h4 class="widget_title">Category</h4>
+                        <h4 id="categoryTitle" class="widget_title"></h4>
                         <ul id="catList" class="list cat-list">
                         </ul>
                     </aside>
@@ -64,8 +65,25 @@
 
     <script>
 
+        getPageDetails()
         getData()
         getCategories()
+
+        async function getPageDetails() {
+            showLoader()
+            let res = await axios.get(`{{ url('/api/page') }}/single-blog`)
+            hideLoader()
+
+            if (res.data['status'] === 'success') {
+                let data = res.data['data']
+
+                let div = document.getElementById('cover')
+                div.style.backgroundImage = `url("{{ url('') }}/${data['coverImg']}")`
+
+                document.getElementById('pageTitle').innerText = data['title']
+                document.getElementById('categoryTitle').innerText = data['description']['categoryTitle']
+            }
+        }
 
         async function getCategories(){
             showLoader()

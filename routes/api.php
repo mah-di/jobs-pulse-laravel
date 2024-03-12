@@ -122,8 +122,7 @@ Route::middleware('auth.jwt')->group(function () {
         Route::post('/company-plugin/reject', [CompanyPluginController::class, 'reject'])->name('company-plugin.reject')->can('takeImportantDecision', Company::class);
         Route::delete('/company-plugin/{id}', [CompanyPluginController::class, 'delete'])->name('company-plugin.delete')->can('takeVeryImportantDecision', Company::class);
 
-        Route::post('/page/about', [PageController::class, 'saveAbout'])->name('page.about.save');
-        Route::post('/page/contact', [PageController::class, 'saveContact'])->name('page.contact.save');
+        Route::post('/page', [PageController::class, 'save'])->name('page.save');
     });
 
     Route::middleware('companyUser.check')->group(function () {

@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="section-tittle text-center">
-                    <h2>Recent Jobs</h2>
+                    <h2 id="recentJobsHeading"></h2>
                 </div>
             </div>
         </div>

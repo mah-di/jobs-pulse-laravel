@@ -105,6 +105,7 @@
             image !== null ? data.append('image', image) : null
             data.append('coverImg', coverImg)
             data.append('title', title)
+            data.append('type', 'Contact')
             data.append('heading', heading)
             data.append('state', state)
             data.append('city', city)
@@ -121,7 +122,7 @@
             }
 
             showLoader()
-            let res = await axios.post("{{ route('page.contact.save') }}", data, config)
+            let res = await axios.post("{{ route('page.save') }}", data, config)
             hideLoader()
 
             if (res.data['status'] === 'success') {
