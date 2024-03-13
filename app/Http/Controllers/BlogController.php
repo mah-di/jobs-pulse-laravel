@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Helpers\ImageHelper;
 use App\Helpers\ResponseHelper;
 use App\Models\Blog;
-use App\Models\BlogCategory;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\File as FileRule;
