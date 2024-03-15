@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
 
+        // Seeding Super User Accounts
         $result = \App\Models\User::factory()->create([
             'email' => 'admin@jobspulse.com',
             'role' => 'Site Admin',
@@ -60,6 +61,14 @@ class DatabaseSeeder extends Seeder
             'firstName' => 'Jerry',
             'lastName' => 'Doe',
             'profileImg' => env('DEFAULT_PROFILE_IMG'),
+        ]);
+
+        // Seeding Plugins
+        \App\Models\Plugin::factory()->create([
+            'title' => 'Employee'
+        ]);
+        \App\Models\Plugin::factory()->create([
+            'title' => 'Blog'
         ]);
 
         // Seeding Pages Details

@@ -23,62 +23,65 @@
                             <h4>Company Info</h4>
                             <div class="mt-10">
                                 <label for="comName">Company Name *</label>
-                                <input id="comName" type="text" name="first_name" placeholder="Company Name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Company Name'" required="" value="abc" class="single-input">
+                                <input id="comName" type="text"  placeholder="Company Name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Company Name'" required="" class="single-input">
                             </div>
                             <div class="mt-10">
                                 <label for="comLogo">Company Logo *</label>
-                                <input id="comLogo" type="file" name="first_name" placeholder="Company Logo" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Company Logo'" required="" class="single-input">
+                                <input id="comLogo" type="file"  placeholder="Company Logo" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Company Logo'" required="" class="single-input">
                             </div>
                             <div class="mt-10">
                                 <label for="comDescription">Company Description *</label>
-                                <textarea id="comDescription" type="text" name="first_name" placeholder="Company Description" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Company Description'" required="" value="abc" class="single-input" rows="10"></textarea>
+                                <textarea id="comDescription" type="text"  placeholder="Company Description" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Company Description'" required="" class="single-input" rows="10"></textarea>
                             </div>
                             <div class="mt-10">
                                 <label for="comAddress">Company Address *</label>
-                                <textarea id="comAddress" type="text" name="first_name" placeholder="Company Address" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Company Address'" required="" value="abc" class="single-input" rows="3"></textarea>
+                                <textarea id="comAddress" type="text"  placeholder="Company Address" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Company Address'" required="" class="single-input" rows="3"></textarea>
                             </div>
                             <div class="mt-10">
                                 <label for="comContact">Company Contact *</label>
-                                <input id="comContact" type="text" name="first_name" placeholder="Company Contact" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Company Contact'" required="" value="abc" class="single-input">
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-text" id="contact-prefix">+880</span>
+                                <input id="comContact" type="text" aria-describedby="contact-prefix" placeholder="Company Contact" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Company Contact'" required="" class="form-control">
                             </div>
                             <div class="mt-10">
                                 <label for="comEmail">Company Email *</label>
-                                <input id="comEmail" type="email" name="first_name" placeholder="Company Email" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Company Email'" required="" value="abc" class="single-input">
+                                <input id="comEmail" type="email"  placeholder="Company Email" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Company Email'" required="" class="single-input">
                             </div>
                             <div class="mt-10">
                                 <label for="comWebsite">Company Website</label>
-                                <input id="comWebsite" type="text" name="first_name" placeholder="Company Website" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Company Website'" required="" class="single-input">
+                                <input id="comWebsite" type="text"  placeholder="Company Website" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Company Website'" required="" class="single-input">
                             </div>
                             <div class="mt-10">
                                 <label for="comEstablishDate">Establish Date *</label>
-                                <input id="comEstablishDate" type="date" name="first_name" placeholder="Establish Date" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Establish Date'" required="" class="single-input">
+                                <input id="comEstablishDate" type="date"  placeholder="Establish Date" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Establish Date'" required="" class="single-input">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <h4>Admin Info</h4>
                             <div class="mt-10">
                                 <label for="userProfileImg">Profile Image</label>
-                                <input id="userProfileImg" type="file" name="first_name" placeholder="Profile Image" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Profile Image'" required="" class="single-input">
+                                <input id="userProfileImg" type="file"  placeholder="Profile Image" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Profile Image'" required="" class="single-input">
                             </div>
                             <div class="mt-10">
                                 <label for="userFirstName">First Name *</label>
-                                <input id="userFirstName" type="text" name="first_name" placeholder="First Name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'First Name'" required="" value="abc" class="single-input">
+                                <input id="userFirstName" type="text"  placeholder="First Name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'First Name'" required="" class="single-input">
                             </div>
                             <div class="mt-10">
                                 <label for="userLastName">Last Name *</label>
-                                <input id="userLastName" type="text" name="first_name" placeholder="Last Name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Last Name'" required="" value="abc" class="single-input">
+                                <input id="userLastName" type="text"  placeholder="Last Name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Last Name'" required="" class="single-input">
                             </div>
                             <div class="mt-10">
                                 <label for="userEmail">Email *</label>
-                                <input id="userEmail" type="text" name="first_name" placeholder="Email" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email'" required="" value="abc" class="single-input">
+                                <input id="userEmail" type="text"  placeholder="Email" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email'" required="" class="single-input">
                             </div>
                             <div class="mt-10">
                                 <label for="userPassword">Password *</label>
-                                <input id="userPassword" type="password" name="first_name" placeholder="Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'" required="" value="abc" class="single-input">
+                                <input id="userPassword" type="password"  placeholder="Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'" required="" class="single-input">
                             </div>
                             <div class="mt-10">
                                 <label for="cUserPassword">Confirm Password *</label>
-                                <input id="cUserPassword" type="password" name="first_name" placeholder="Confirm Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Confirm Password'" required="" value="abc" class="single-input">
+                                <input id="cUserPassword" type="password"  placeholder="Confirm Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Confirm Password'" required="" class="single-input">
                             </div>
                         </div>
                     </div>
@@ -98,13 +101,13 @@
                 </div>
                 <div class="modal-body">
                     <div class="mt-10">
-                        <input id="email" type="email" name="first_name" placeholder="Email" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email'" required="" class="single-input">
+                        <input id="email" type="email"  placeholder="Email" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email'" required="" class="single-input">
                     </div>
                     <div class="mt-10">
-                        <input id="password" type="password" name="first_name" placeholder="Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'" required="" class="single-input">
+                        <input id="password" type="password"  placeholder="Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'" required="" class="single-input">
                     </div>
                     <div class="mt-10">
-                        <input id="cpassword" type="password" name="first_name" placeholder="Confirm Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Confirm Password'" required="" class="single-input">
+                        <input id="cpassword" type="password"  placeholder="Confirm Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Confirm Password'" required="" class="single-input">
                     </div>
                     <button id="companyLogin" type="button" class="btn head-btn2 mt-4 w-100" onclick="registerCandidate()">SignUp</button>
                 </div>
@@ -205,6 +208,8 @@
                 localStorage.setItem('companyStatus', res.data['data']['company']['status'])
 
                 alert('success')
+
+                window.location.href = "{{ route('verify.view') }}"
             } else {
                 alert(res.data['message'])
             }

@@ -49,13 +49,14 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="contact" placeholder="name@example.com"
+                            <small>Contact *</small>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="contact-prefix">+880</span>
+                                <input type="text" class="form-control" id="contact" aria-describedby="contact-prefix" placeholder="name@example.com"
                                 @if (auth()->user()->role === 'Editor')
                                 disabled
                                 @endif
                                 >
-                                <label for="floatingInput">Contact *</label>
                             </div>
                         </div>
                         <div class="col-md-4">

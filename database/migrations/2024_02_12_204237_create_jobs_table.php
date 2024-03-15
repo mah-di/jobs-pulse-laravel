@@ -25,7 +25,7 @@ return new class extends Migration
                 ->cascadeOnDelete();
 
             $table->string('title');
-            $table->string('description');
+            $table->longText('description');
             $table->string('skills');
             $table->unsignedInteger('salary');
             $table->enum('status', ['PENDING', 'AVAILABLE', 'UNAVAILABLE', 'RESTRICTED']);

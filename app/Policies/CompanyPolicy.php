@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Company;
+use App\Models\Plugin;
 use App\Models\User;
 
 class CompanyPolicy
@@ -57,12 +58,12 @@ class CompanyPolicy
 
     public function manageEmployee(User $user)
     {
-        return $user->isSuperUser or $user->company->companyPlugins()->where(['plugin_id' => Company::EMPLOYEE, 'status' => 'ACTIVE'])->exists();
+        return $user->isSuperUser or $user->company->companyPlugins()->where(['plugin_id' => Plugin::EMPLOYEE, 'status' => 'ACTIVE'])->exists();
     }
 
     public function employeeCanAccess(User $user)
     {
-        return $user->role === 'Admin' or $user->company->companyPlugins()->where(['plugin_id' => Company::EMPLOYEE, 'status' => 'ACTIVE'])->exists();
+        return $user->role === 'Admin' or $user->company->companyPlugins()->where(['plugin_id' => Plugin::EMPLOYEE, 'status' => 'ACTIVE'])->exists();
     }
 
     public function createEmployees(User $user)
@@ -83,6 +84,6 @@ class CompanyPolicy
 
     public function useBlog(User $user)
     {
-        return $user->isSuperUser or $user->company->companyPlugins()->where(['plugin_id' => Company::BLOG, 'status' => 'ACTIVE'])->exists();
+        return $user->isSuperUser or $user->company->companyPlugins()->where(['plugin_id' => Plugin::BLOG, 'status' => 'ACTIVE'])->exists();
     }
 }

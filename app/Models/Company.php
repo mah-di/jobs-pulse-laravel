@@ -9,9 +9,6 @@ class Company extends Model
 {
     use HasFactory;
 
-    const EMPLOYEE = 1;
-    const BLOG = 2;
-
     protected $fillable = [
         'name',
         'logo',

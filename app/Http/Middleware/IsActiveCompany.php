@@ -3,7 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Helpers\ResponseHelper;
-use App\Models\Company;
+use App\Models\Plugin;
 use Closure;
 use Exception;
 use Illuminate\Http\Request;
@@ -22,7 +22,7 @@ class IsActiveCompany
             if ($request->user()->company_id and $request->user()->company->status !== 'ACTIVE')
                 throw new Exception("Access denied!");
 
-            if (in_array($request->user()->role, ['Manager', 'Editor']) and !$request->user()->company->companyPlugins()->where(['plugin_id' => Company::EMPLOYEE, 'status' => 'ACTIVE'])->exists())
+            if (in_array($request->user()->role, ['Manager', 'Editor']) and !$request->user()->company->companyPlugins()->where(['plugin_id' => Plugin::EMPLOYEE, 'status' => 'ACTIVE'])->exists())
                 throw new Exception("Access denied!");
 
             return $next($request);

@@ -94,7 +94,7 @@
                                             <span>Contact: </span>
                                         </div>
                                         <div class="col-md-9">
-                                            <b id="contact"></b>
+                                            <b>+880 <span id="contact"></span></b>
                                         </div>
                                     </div>
                                     <div class="row mb-3">
